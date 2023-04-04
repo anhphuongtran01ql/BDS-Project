@@ -9,12 +9,13 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { justifyCenter } from "../../themes/commonStyles";
-import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "../../Services/Auth/Login";
-import AlertMassage from "../Layout/AlertMessage";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {justifyCenter} from "../../themes/commonStyles";
+import {useNavigate} from "react-router";
+import {useMutation} from "@tanstack/react-query";
+import {login} from "../../Services/Auth/Login";
+import {useContext} from 'react';
+import {SnackBarContext} from "../../context/snackbarContext";
 
 function Copyright(props) {
   return (
@@ -37,30 +38,25 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const navigate = useNavigate();
-  const mutation = useMutation(login);
+    const navigate = useNavigate();
+    const mutation = useMutation(login);
+    const [snackBarStatus, setSnackBarStatus] = useContext(SnackBarContext);
 
-  const [status, setStatusBase] = React.useState("");
-  // console.log("status: ", status);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        mutation.mutate(data, {
+            onSuccess: (res) => {
+                localStorage.setItem("userDetails", JSON.stringify(res.data));
+                setSnackBarStatus({msg: "Success", key: Math.random()});
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    mutation.mutate(data, {
-      onSuccess: (res) => {
-        // console.log("res", res);
-        localStorage.setItem("userDetails", JSON.stringify(res.data));
-        setStatusBase({ msg: "Success", key: Math.random() });
-
-        navigate("/");
-        console.log("login success");
-      },
-      onError: (error) => {
-        setStatusBase({ msg: "Failed", key: Math.random() });
-        console.log("Login failed", error);
-      },
-    });
-  };
+                navigate("/");
+            },
+            onError: (error) => {
+                setSnackBarStatus({msg: "Failed", key: Math.random()});
+            },
+        });
+    };
 
   return (
     <ThemeProvider theme={theme}>
