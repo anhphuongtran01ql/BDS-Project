@@ -12,7 +12,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 
 // react icons
-import { AiFillStar } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import {
   flexBetween,
@@ -113,27 +113,35 @@ const CarouselCard = ({ post }) => {
         <Box sx={{ mt: 2 }}>
           <Typography
             component="div"
-            variant="subtitle1"
             align="left"
-            sx={{ fontSize: 20 }}
+            sx={{ fontSize: 20, fontWeight: "bold", padding: "0 8px" }}
           >
-            {post.detailsAddress}
+            {post.postTitle}
           </Typography>
-          <Typography component="h4" align="left">
-            {" "}
-            {post.typeOfApartment}
+          <Typography
+            component="div"
+            align="left"
+            sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
+          >
+            <span>
+              <i>{post.detailsAddress} </i>
+            </span>
+            <span> | </span>
+            <span> {post.typeOfApartment}</span>
           </Typography>
-          <Typography component="h5" align="left">
-            {" "}
-            {post.price}
+
+          <Typography
+            component="h5"
+            align="left"
+            sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
+          >
+            <strong>${post.price}</strong>/night
           </Typography>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <Box sx={dFlex}>
-            <>
-              <Typography component="h5"> {post.totalLike}</Typography>
-              <AiFillStar size={18} />
-            </>
+          <Box sx={{ ...dFlex, alignItems: "center" }}>
+            <AiFillHeart size={16} color="red" />
+            <Typography component="h5"> {post.totalLike}</Typography>
           </Box>
         </Box>
       </Box>

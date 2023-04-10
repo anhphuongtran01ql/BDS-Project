@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -9,13 +9,13 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {justifyCenter} from "../../themes/commonStyles";
-import {useNavigate} from "react-router";
-import {useMutation} from "@tanstack/react-query";
-import {login} from "../../Services/Auth/Login";
-import {useContext} from 'react';
-import {SnackBarContext} from "../../context/snackbarContext";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { justifyCenter } from "../../themes/commonStyles";
+import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../Services/Auth/Login";
+import { useContext } from "react";
+import { SnackBarContext } from "../../context/snackbarContext";
 
 function Copyright(props) {
   return (
@@ -38,25 +38,29 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-    const navigate = useNavigate();
-    const mutation = useMutation(login);
-    const [snackBarStatus, setSnackBarStatus] = useContext(SnackBarContext);
+  const navigate = useNavigate();
+  const mutation = useMutation(login);
+  const [snackBarStatus, setSnackBarStatus] = useContext(SnackBarContext);
+  const [emailErrorText, setEmailErrorText] = useState("");
+  const [passwordErrorText, setPasswordErrorText] = useState("");
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        mutation.mutate(data, {
-            onSuccess: (res) => {
-                localStorage.setItem("userDetails", JSON.stringify(res.data));
-                setSnackBarStatus({msg: "Success", key: Math.random()});
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    mutation.mutate(data, {
+      onSuccess: (res) => {
+        localStorage.setItem("userDetails", JSON.stringify(res.data));
+        setSnackBarStatus({ msg: "Login Successfully!", key: Math.random() });
 
-                navigate("/");
-            },
-            onError: (error) => {
-                setSnackBarStatus({msg: "Failed", key: Math.random()});
-            },
-        });
-    };
+        navigate("/");
+      },
+      onError: (error) => {
+        setEmailErrorText("Invalid email! Please enter again!");
+        setPasswordErrorText("Invalid password! Please enter again!");
+        setSnackBarStatus({ msg: "Failed to login!", key: Math.random() });
+      },
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -95,15 +99,11 @@ export default function Login() {
               Sign in
             </Typography>
 
-            {status || localStorage.getItem("snackbar") ? (
-              <AlertMassage message={status.msg} key={status.key} />
-            ) : null}
-
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
               sx={{ mt: 1 }}
+              onSubmit={handleSubmit}
             >
               <TextField
                 margin="normal"
@@ -114,6 +114,8 @@ export default function Login() {
                 name="username"
                 autoComplete="username"
                 autoFocus
+                error={!!emailErrorText}
+                helperText={emailErrorText}
               />
               <TextField
                 margin="normal"
@@ -124,12 +126,15 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={!!passwordErrorText}
+                helperText={passwordErrorText}
               />
               <LoadingButton
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                // onClick={handleSubmit}
               >
                 Sign In
               </LoadingButton>

@@ -13,8 +13,8 @@ export default function AlertMassage({ message }) {
     <div>
       <Snackbar
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: "top",
+          horizontal: "right",
         }}
         open={open}
         autoHideDuration={2000}
@@ -25,7 +25,7 @@ export default function AlertMassage({ message }) {
         }}
         message={message}
         action={[
-          <IconButton key="close" onClick={handleClose}>
+          <IconButton key="close" onClick={handleClose} sx={{ color: "white" }}>
             <CloseIcon />
           </IconButton>,
         ]}
