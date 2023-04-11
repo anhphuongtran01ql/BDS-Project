@@ -1,0 +1,31 @@
+import Grid from "@mui/material/Grid";
+import Masonry from "@mui/lab/Masonry";
+import {justifyCenter} from "../../../themes/commonStyles";
+import {forwardRef} from "react";
+
+const ShowAllImage = forwardRef(({itemData, ref}) => {
+    return (
+        <Grid container spacing={2} ref={ref} sx={{...justifyCenter}}>
+            <Masonry columns={3} spacing={4}>
+                {itemData.map((item, index) => (
+                    <div key={index}>
+                        <img
+                            src={`${item.img}`}
+                            srcSet={`${item.img}`}
+                            alt={item.title}
+                            loading="lazy"
+                            style={{
+                                borderBottomLeftRadius: 4,
+                                borderBottomRightRadius: 4,
+                                display: "block",
+                                width: "100%",
+                            }}
+                        />
+                    </div>
+                ))}
+            </Masonry>
+        </Grid>
+    )
+})
+
+export default ShowAllImage;
