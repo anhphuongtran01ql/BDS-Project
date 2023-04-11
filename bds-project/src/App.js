@@ -7,6 +7,7 @@ import NotFoundPage from "./components/Auth/NotFound";
 import { SnackBarContext } from "./context/snackbarContext";
 import { useState } from "react";
 import AlertMassage from "./components/Layout/AlertMessage";
+import DetailsPost from "./components/Post";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -16,7 +17,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<ClientLayout />}>
-            <Route path="" element={<Homepage />}></Route>
+            <Route path="/" element={<Homepage />}></Route>
+            <Route path="/post/:postId" element={<DetailsPost />}></Route>
           </Route>
 
           <Route path="/login" element={<Login />}></Route>

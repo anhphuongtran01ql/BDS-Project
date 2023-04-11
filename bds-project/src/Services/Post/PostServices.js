@@ -7,8 +7,14 @@ const fetchAllPosts = async (paramQuery) => {
       paramQuery.page - 1
     }&size=${paramQuery.pageSize}`
   );
-  // console.log("data services", data);
   return data;
 };
 
-export { fetchAllPosts };
+const fetchPostById = async (postId) => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/post/${postId}`
+  );
+  return data;
+};
+
+export { fetchAllPosts, fetchPostById };

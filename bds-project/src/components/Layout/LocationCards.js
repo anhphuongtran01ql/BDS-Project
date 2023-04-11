@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CarouselCard from "./CarouselCard";
@@ -58,7 +59,12 @@ const LocationCards = () => {
                 return (
                   <>
                     <Grid key={post.postId} item xs={12} sm={6} md={4} lg={3}>
-                      <CarouselCard post={post} key={index} />
+                      <Link
+                        to={`/post/${post.postId}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <CarouselCard post={post} key={index} />
+                      </Link>
                     </Grid>
                   </>
                 );
