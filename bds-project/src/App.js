@@ -7,6 +7,7 @@ import NotFoundPage from "./components/Auth/NotFound";
 import { SnackBarContext } from "./context/snackbarContext";
 import { useState } from "react";
 import AlertMassage from "./components/Layout/AlertMessage";
+import AdminHomepage from "./components/Admin/Homepage";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -20,6 +21,8 @@ function App() {
           </Route>
 
           <Route path="/login" element={<Login />}></Route>
+
+          <Route path="/admin" element={<AdminHomepage />}></Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
