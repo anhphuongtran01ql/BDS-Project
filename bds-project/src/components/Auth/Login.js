@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../Services/Auth/Login";
 import { useContext } from "react";
 import { SnackBarContext } from "../../context/snackbarContext";
+import ParseJwt from "./ParseJwt";
 
 function Copyright(props) {
   return (
@@ -49,10 +50,21 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     mutation.mutate(data, {
       onSuccess: (res) => {
-        localStorage.setItem("userDetails", JSON.stringify(res.data));
+        localStorage.setItem(
+          "accessToken",
+          JSON.stringify(res.data.access_token)
+        );
         setSnackBarStatus({ msg: "Login Successfully!", key: Math.random() });
-
-        navigate("/");
+        let userIdentity = ParseJwt(res.data.access_token);
+        if (userIdentity.roles.toString() === "admin") {
+          navigate("/admin");
+        }
+        if (userIdentity.roles.toString() === "lessor") {
+          navigate("/lessor");
+        }
+        if (userIdentity.roles.toString() === "tenant") {
+          navigate("/tenant");
+        }
       },
       onError: (error) => {
         setEmailErrorText("Invalid email! Please enter again!");

@@ -9,16 +9,22 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-
+import {
+  GetCurrentRoles,
+  GetCurrentUsername,
+} from "../../Auth/Authorization/getUserInfo";
 function Header(props) {
   const { onDrawerToggle } = props;
+
+  const username = GetCurrentUsername();
+  const role = GetCurrentRoles();
 
   return (
     <>
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
-            <Grid sx={{ display: { sm: "none", xs: "block" } }} item>
+            <Grid sx={{ display: { md: "none", xs: "block" } }} item>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -43,14 +49,8 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                role
+                Welcome {role[0]} {username}
               </Typography>
-            </Grid>
-
-            <Grid item>
-              <Button variant="contained" sx={{ mr: 1 }}>
-                Add user
-              </Button>
             </Grid>
           </Grid>
         </Toolbar>

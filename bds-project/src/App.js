@@ -8,10 +8,11 @@ import { SnackBarContext } from "./context/snackbarContext";
 import { useState } from "react";
 import AlertMassage from "./components/Layout/AlertMessage";
 import AdminHomepage from "./components/Admin/Homepage";
+import { PrivateRoute } from "./routes/privateRoutes";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
-
+  
   return (
     <SnackBarContext.Provider value={[snackbarStatus, setSnackbarStatus]}>
       <div className="App">
@@ -22,7 +23,9 @@ function App() {
 
           <Route path="/login" element={<Login />}></Route>
 
-          <Route path="/admin" element={<AdminHomepage />}></Route>
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route path="/admin" element={<AdminHomepage />}></Route>
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
