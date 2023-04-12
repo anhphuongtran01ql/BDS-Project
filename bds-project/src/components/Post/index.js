@@ -1,7 +1,9 @@
+import './index.css';
 import React, {useMemo, useRef, useState} from "react";
-import { useParams } from "react-router-dom";
-import { fetchPostById } from "../../Services/Post/PostServices";
-import { useQuery } from "@tanstack/react-query";
+import {useParams} from "react-router-dom";
+import {fetchPostById} from "../../Services/Post/PostServices";
+import {useQuery} from "@tanstack/react-query";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -10,95 +12,163 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 
-import { justifyCenter } from "../../themes/commonStyles";
-import { Divider } from "@mui/material";
+import {justifyCenter} from "../../themes/commonStyles";
+import {Divider} from "@mui/material";
 import {itemData} from "../../data/postData";
 import ShowAllImage from "./Detail/ShowAllImage";
 
 import AppsIcon from '@mui/icons-material/Apps';
+import {useTheme} from "@mui/styles";
+import {Skeleton} from "@mui/lab";
+import ImageComponent from "./Detail/ImageComponent";
 
 function DetailsPost() {
     const {postId} = useParams();
     const [showAll, setShowAll] = useState(false);
+    const [showPreviewImage, setShowPreviewImage] = useState(false);
+    const [imagePreview, setImagePreview] = useState({})
+    const theme = useTheme();
+    const matchesXs = useMediaQuery(theme.breakpoints.up('sm'));
 
-    const {data, isLoading, isFetching} = useQuery({
-        queryKey: ["post", postId],
-        queryFn: () => fetchPostById(postId),
-    });
+
+    // const {data, isLoading, isFetching} = useQuery({
+    //     queryKey: ["post", postId],
+    //     queryFn: () => fetchPostById(postId),
+    // });
     const handleClickShowAll = () => {
         setShowAll(!showAll)
     }
-  return (
-    <>
-      {/*{isLoading || isFetching ? (*/}
-      {/*  <>Loading</>*/}
-      {/*) : (*/}
-      {/*  <>*/}
-          <Container maxWidth="lg">
-            <Grid container spacing={2} sx={{ ...justifyCenter }} style={{ paddingTop:"90px"}} >
-              <Grid item xs={6} >
-                <img
-                    src={itemData[0].img}
-                    srcSet={itemData[0].img}
-                    alt={itemData[0].title}
-                    height={500}
-                    loading="lazy"
-                    style={{
-                      borderRadius:4,
-                      display: "block",
-                      width: "100%",
-                    }}
-                />
-              </Grid>
 
-              <Grid item xs={6} >
-                <ImageList sx={{width: 500, height: 500, overflowY: "unset", marginTop: 0}} cols={2} gap={10}>
-                  {itemData.map((item, index) => {
-                    if (index !== 0 && index < 5) {
-                      return (<ImageListItem key={index}>
-                        <img
-                            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                            alt={item.title}
+    const handleImagePreview = (img) => {
+        setImagePreview(img)
+        setShowPreviewImage(true)
+    }
+
+    return (
+        <>
+            {/*{isLoading || isFetching ? (*/}
+            {/*  <>Loading</>*/}
+            {/*) : (*/}
+            {/*  <>*/}
+            <Container maxWidth="lg">
+                <Grid container spacing={2} sx={{...justifyCenter}} style={{paddingTop: "90px"}}>
+                    <Grid item xs={12} sm={6}>
+                        <ImageComponent
+                            ref={useRef().current}
+                            image={itemData[0]}
                             style={{
-                                borderRadius:4,
+                                borderRadius: 4,
+                                display: "block",
+                                width: "100%",
                             }}
-                            loading="lazy"
-                        />
-                      </ImageListItem>)
-                    }
-                  })}
-                </ImageList>
-              </Grid>
-            </Grid>
-              <Button variant="outlined" onClick={handleClickShowAll}><AppsIcon fontVariant="outlined" style={{ ...justifyCenter, marginRight:5}} />Show all photos</Button>
+                            height={matchesXs ? '500px' : '200px'}
+                            onPreviewClick={handleImagePreview}/>
+                    </Grid>
 
-              {/*<Grid item xs={12}>*/}
-              {/*    {data.postTitle}*/}
-              {/*</Grid>*/}
-            <Divider />
-          </Container>
-        <Modal
-            open={showAll}
-            onClose={()=> setShowAll(false)}
-            slotProps={{backdrop: {
-                style: {backgroundColor: 'white'}}
-            }}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            style={{
-                overflowY:"auto",
-                display:"flex",
-                width:"60%",
-                margin:"90px auto"
-            }}
-        >
-            <ShowAllImage itemData={itemData} ref={useRef()} />
-        </Modal>
-        {/*</>*/}
-      {/*)}*/}
-    </>
-  );
+                    <Grid item xs={12} sm={6}>
+                        <ImageList sx={{
+                            width: {xs: 'auto', sm: 500},
+                            height: 500,
+                            overflowY: 'unset',
+                            marginTop: 0
+                        }}
+                                   cols={matchesXs ? 2 : 1} gap={10}>
+                            {itemData.map((item, index) => {
+                                if (index !== 0 && index < 5) {
+                                    if (index === 4) {
+                                        return (<div style={{position: "relative"}} key={index}>
+                                                <ImageListItem>
+                                                    <ImageComponent
+                                                        image={item}
+                                                        style={{
+                                                            borderRadius: 4,
+
+                                                        }}
+                                                        customFilterImage='?w=164&h=164&fit=crop&auto=format'
+                                                        onPreviewClick={handleImagePreview}/>
+                                                </ImageListItem>
+                                                <Button variant="outlined" className='button-show-all-image'
+                                                        onClick={handleClickShowAll}>
+                                                    <AppsIcon
+                                                        fontVariant="outlined"
+                                                        style={{...justifyCenter, marginRight: 5}}/>
+                                                    Show all photos
+                                                </Button>
+                                            </div>
+                                        )
+                                    }
+                                    return (
+                                        <ImageListItem key={index}>
+                                            <ImageComponent
+                                                image={item}
+                                                style={{
+                                                    borderRadius: 4,
+                                                }}
+                                                customFilterImage='?w=164&h=164&fit=crop&auto=format'
+                                                onPreviewClick={handleImagePreview}/>
+                                        </ImageListItem>
+                                    )
+                                }
+                            })}
+                        </ImageList>
+                    </Grid>
+                </Grid>
+
+                {/*<Grid item xs={12}>*/}
+                {/*    {data.postTitle}*/}
+                {/*</Grid>*/}
+                <Divider/>
+            </Container>
+            <Modal
+                open={showAll}
+                onClose={() => setShowAll(false)}
+                slotProps={{
+                    backdrop: {
+                        style: {backgroundColor: 'white'}
+                    }
+                }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                style={{
+                    overflowY: "auto",
+                    display: "flex",
+                    width: "60%",
+                    margin: "90px auto"
+                }}
+            >
+                <ShowAllImage itemData={itemData} ref={useRef().current}/>
+            </Modal>
+
+            {/*show preview image*/}
+            <Modal
+                open={showPreviewImage}
+                onClose={() => setShowPreviewImage(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "60%",
+                    margin: "0 auto"
+                }}
+            >
+                <ImageComponent
+                    ref={useRef().current}
+                    image={imagePreview}
+                    style={{
+                        borderRadius: 4,
+                        display: "block",
+                        width: "100%",
+                        objectFit:"contain"
+                    }}
+                    preview={true}
+                    height="500px"/>
+            </Modal>
+            {/*</>*/}
+            {/*)}*/}
+        </>
+    );
 }
 
 export default DetailsPost;
