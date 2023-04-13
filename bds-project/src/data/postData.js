@@ -121,4 +121,22 @@ const itemData = [
     },
 ];
 
-export {itemData}
+const postData = {
+    "postId": 7,
+    "postTitle": "Beach villa / Private pool / Ocean view / SPA",
+    "description": "Every booking includes free protection from Host cancellations, listing inaccuracies, and other issues like trouble checking in.",
+    "numberOfRooms": 2,
+    "squareArea": 40.0,
+    "price": 100.0,
+    "detailsAddress": "27/17 Dong Xoai",
+    "imageUrl": "https://s3.ap-southeast-1.amazonaws.com/bds-rent/1679151651101-Untitled.png",
+    "videoUrl": "https://s3.ap-southeast-1.amazonaws.com/bds-rent/pexels-koolshooters-6975806.mp4",
+    "typeOfApartment": "room",
+    "authorId": 2,
+    "totalLike": 11,
+    "deleted": false,
+    "sold": false,
+    "totalReviews": 20
+}
+
+export {itemData, postData}
