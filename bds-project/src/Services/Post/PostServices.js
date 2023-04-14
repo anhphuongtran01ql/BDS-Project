@@ -1,5 +1,6 @@
 import axios from "axios";
 import Global from "../../global";
+import {authHeader} from "../../Helper/AuthHeader";
 
 const fetchAllPosts = async (paramQuery) => {
   const { data } = await axios.get(
@@ -16,5 +17,33 @@ const fetchPostById = async (postId) => {
   );
   return data;
 };
+// postId, userId, comment
+const createComment = async (data) => {
+  const response = await axios.post(
+      `${Global.BASE_API_PATH}/api/v1/post/`, // change to create comment api
+      data,
+      authHeader()
+  );
+  return response?.data;
+}
 
-export { fetchAllPosts, fetchPostById };
+const editComment = async (data) => {
+  const response = await axios.put(
+      `${Global.BASE_API_PATH}/api/v1/post/`, // change to edit comment api
+      data,
+      authHeader()
+  );
+  return response?.data;
+}
+
+const fetchCommentByPostId = async (postId) => {
+  //change to api get comment by PostId
+  const {data} = await axios.get(
+      `${Global.BASE_API_PATH}/api/v1/post/${postId}`
+  );
+
+  return data;
+}
+
+
+export {fetchAllPosts, fetchPostById, createComment, fetchCommentByPostId, editComment};

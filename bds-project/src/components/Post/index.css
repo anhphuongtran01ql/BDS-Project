@@ -25,9 +25,14 @@ li {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
 }
 
-.comments {
+.content {
     white-space: normal;
     text-align: left;
+}
+
+.comments {
+    display: flex;
+    justify-content: space-between
 }
 
 @media screen and (min-width: 600px ) {
