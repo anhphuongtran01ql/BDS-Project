@@ -60,19 +60,27 @@ function DetailsPost() {
                                     gutterBottom>{data.postTitle}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={7}>
-                        <ImageComponent
-                            ref={useRef().current}
-                            image={itemData[0]}
-                            style={{
-                                borderRadius: 4,
-                                display: "block",
-                                width: "100%",
-                            }}
-                            height={matchesXs ? '500px' : '200px'}
-                            onPreviewClick={handleImagePreview}/>
+                        <div style={{position: "relative"}} >
+                            <ImageComponent
+                                ref={useRef().current}
+                                image={itemData[0]}
+                                style={{
+                                    borderRadius: 4,
+                                    display: "block",
+                                    width: "100%",
+                                }}
+                                height={matchesXs ? '500px' : '200px'}
+                                onPreviewClick={handleImagePreview}/>
+                            {!matchesXs && <Button variant="outlined" className='button-show-all-image'
+                                                  onClick={handleClickShowAll}>
+                                <AppsIcon
+                                    fontVariant="outlined"
+                                    style={{...justifyCenter, marginRight: 5}}/>
+                                Show all photos
+                            </Button>}
+                        </div>
                     </Grid>
-
-                    <Grid item xs={12} sm={5}>
+                    {matchesXs && <Grid item xs={5}>
                         <ImageList sx={{
                             width: {xs: 'auto', sm: 500},
                             overflowY: 'unset',
@@ -117,7 +125,7 @@ function DetailsPost() {
                                 }
                             })}
                         </ImageList>
-                    </Grid>
+                    </Grid>}
 
                     <Grid item xs={12}>
                         <Grid container spacing={2}>

@@ -11,7 +11,7 @@ const ReserveCard = ({data}) => {
         <Card className="reserve-card" sx={{ minWidth: 275 }}>
             <CardContent>
                 <Typography variant="h4"
-                            gutterBottom>{data.price}đ / month</Typography>
+                            >{data.price}đ / month</Typography>
             </CardContent>
             <CardActions>
                 <Button size="small" variant='primary' sx={{width:'100%', background:'#FF385C', color:'white', fontSize:15, fontWeight:'bold', textTransform:'none'}} >Reserve</Button>

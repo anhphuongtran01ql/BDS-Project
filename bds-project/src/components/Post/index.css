@@ -19,10 +19,12 @@ li {
 }
 
 .reserve-card {
-    border: 1px solid rgb(221, 221, 221);
-    border-radius: 12px !important;
-    padding: 24px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
+    z-index: 1000;
 }
 
 .content {
@@ -38,5 +40,12 @@ li {
 @media screen and (min-width: 600px ) {
     .MuiImageListItem-img {
         height: auto !important;
+    }
+    .reserve-card {
+        position:relative;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 12px !important;
+        padding: 24px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
     }
 }
