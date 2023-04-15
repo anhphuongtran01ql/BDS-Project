@@ -4,7 +4,7 @@ import {useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {createComment, editComment} from "../../../Services/Post/PostServices";
 
-const CommentEditComponent = ({commentValue, commentId, updateCommentAfterEdit}) => {
+const CommentEditComponent = ({commentValue, commentId, userId, commentUserId}) => {
     const [edit, setEdit] = useState(false);
     const [oldComment, setOldComment] = useState(commentValue)
     const [comment, setComment] = useState(commentValue)
@@ -23,7 +23,7 @@ const CommentEditComponent = ({commentValue, commentId, updateCommentAfterEdit})
             //        console.log(error)
             //     },
             // })
-            updateCommentAfterEdit(comment, commentId)
+           
             setEdit(false)
         }
         if (e.key === 'Escape') {
@@ -50,7 +50,8 @@ const CommentEditComponent = ({commentValue, commentId, updateCommentAfterEdit})
                     /> :
                     <div className="comments">
                         <div className='content'>{comment}</div>
-                        <EditIcon fontSize='small' onClick={() => setEdit(true)}/>
+                        {/* if want to more condition to show edit button, please add more conditions here */}
+                        { userId === commentUserId && <EditIcon fontSize='small' onClick={() => setEdit(true)}/>}
                     </div>
             }
         </>
