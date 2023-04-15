@@ -9,10 +9,11 @@ import { useState } from "react";
 import AlertMassage from "./components/Layout/AlertMessage";
 import AdminHomepage from "./components/Admin/Homepage";
 import { PrivateRoute } from "./routes/privateRoutes";
+import { UserInfo } from "./components/Admin/Users/detail";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
-  
+
   return (
     <SnackBarContext.Provider value={[snackbarStatus, setSnackbarStatus]}>
       <div className="App">
@@ -25,6 +26,10 @@ function App() {
 
           <Route exact path="/" element={<PrivateRoute />}>
             <Route path="/admin" element={<AdminHomepage />}></Route>
+            <Route
+              path="/admin/list-users/:userId"
+              element={<UserInfo />}
+            ></Route>
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

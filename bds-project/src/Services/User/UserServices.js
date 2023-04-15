@@ -7,8 +7,16 @@ const fetchAllUsers = async () => {
     `${Global.BASE_API_PATH}/api/v1/user/list`,
     authHeader()
   );
-//   console.log("data services", data);
+  //   console.log("data services", data);
   return data;
 };
 
-export { fetchAllUsers };
+const fetchUserById = async (id) => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/user/id/${id}`,
+    authHeader()
+  );
+  return data;
+};
+
+export { fetchAllUsers, fetchUserById };

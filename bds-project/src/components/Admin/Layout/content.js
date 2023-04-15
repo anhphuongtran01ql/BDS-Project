@@ -16,9 +16,10 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { BiDetail, BiEdit } from "react-icons/bi";
+import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { styled } from "@mui/material/styles";
+import UserDetailInfo from "../Users/detail";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,7 +53,7 @@ export default function Content() {
     queryKey: ["users"],
     queryFn: () => fetchAllUsers(),
   });
-  console.log("data", data);
+  // console.log("data", data);
   if (isLoading) {
     return <>Loading</>;
   }
@@ -137,7 +138,7 @@ export default function Content() {
                               {list.roleList[0].roleName}
                             </StyledTableCell>
                             <StyledTableCell>
-                              <BiDetail size={18} style={{ marginRight: 5 }} />
+                              <UserDetailInfo userId={1} />
                               <BiEdit size={18} style={{ marginRight: 5 }} />
                               <AiOutlineDelete
                                 size={18}
