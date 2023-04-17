@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function useAccessToken() {
   const getAccessToken = () => {
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken != undefined) return accessToken;
+    if (accessToken !== undefined) return accessToken;
   };
 
   const [accessToken, setAccessToken] = useState(getAccessToken());

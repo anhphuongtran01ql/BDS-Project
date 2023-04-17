@@ -57,7 +57,7 @@ export default function Login() {
         setSnackBarStatus({ msg: "Login Successfully!", key: Math.random() });
         let userIdentity = ParseJwt(res.data.access_token);
         if (userIdentity.roles.toString() === "admin") {
-          navigate("/admin");
+          navigate("/admin/list-users");
         }
         if (userIdentity.roles.toString() === "lessor") {
           navigate("/lessor");

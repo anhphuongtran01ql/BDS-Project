@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "./navigator";
-import Content from "./content";
 import Header from "./header";
+import { Outlet } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -200,7 +200,7 @@ export default function Paperbase() {
               padding: "20px 20px",
             }}
           >
-            <Content />
+            <Outlet />
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />

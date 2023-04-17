@@ -1,5 +1,4 @@
 import React from "react";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Box from "@mui/material/Box";
@@ -7,30 +6,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import PostAddIcon from "@mui/icons-material/PostAdd";
-
-const categories = [
-  {
-    id: "Users",
-    children: [
-      {
-        id: "Users",
-        icon: <PeopleIcon />,
-      },
-      //   { id: "Database", icon: <DnsRoundedIcon /> },
-    ],
-  },
-  {
-    id: "Posts",
-    children: [{ id: "Posts", icon: <PostAddIcon /> }],
-  },
-];
+import { Link } from "react-router-dom";
 
 const item = {
-  py: "2px",
-  px: 3,
+  py: 1,
+  px: 2,
   color: "rgba(255, 255, 255, 0.7)",
   "&:hover, &:focus": {
     bgcolor: "rgba(255, 255, 255, 0.08)",
@@ -46,37 +28,62 @@ const itemCategory = {
 export default function Navigator(props) {
   const { ...other } = props;
 
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
+          sx={{
+            ...itemCategory,
+            fontSize: 22,
+            color: "#fff",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
           BDS
         </ListItem>
-        <ListItem sx={{ ...item, ...itemCategory }}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText>Overview</ListItemText>
-        </ListItem>
-        {categories.map(({ id, children }) => (
-          <Box key={id} sx={{ bgcolor: "#101F33" }}>
-            <ListItem sx={{ py: 2, px: 3 }}>
-              <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
-            </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText>{childId}</ListItemText>
+
+        <Box sx={{ bgcolor: "#101F33" }}>
+          <List sx={{ margin: 0, padding: 0 }}>
+            <Link to="/admin/list-users" style={{ textDecoration: "none" }}>
+              <ListItem disablePadding key={1}>
+                <ListItemButton
+                  sx={item}
+                  selected={selectedIndex === 1}
+                  onClick={(event) => handleListItemClick(event, 1)}
+                >
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText>Users</ListItemText>
                 </ListItemButton>
               </ListItem>
-            ))}
+            </Link>
 
-            <Divider sx={{ mt: 2 }} />
-          </Box>
-        ))}
+            <Link to="/admin/list-users" style={{ textDecoration: "none" }}>
+              <ListItem disablePadding key={2}>
+                <ListItemButton
+                  sx={item}
+                  selected={selectedIndex === 2}
+                  onClick={(event) => handleListItemClick(event, 2)}
+                >
+                  <ListItemIcon>
+                    <PostAddIcon />
+                  </ListItemIcon>
+                  <ListItemText>Posts</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          </List>
+
+          {/* <Divider sx={{ mt: 2 }} /> */}
+        </Box>
       </List>
     </Drawer>
   );
