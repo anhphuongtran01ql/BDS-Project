@@ -1,6 +1,4 @@
-import React, {useEffect} from 'react';
-import {Form, useParams} from 'react-router-dom';
-
+import React, {useState} from 'react';
 import {useForm, Controller} from "react-hook-form";
 import {
     useMutation,
@@ -8,11 +6,11 @@ import {
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import Container from "@mui/material/Container";
-import {justifyCenter, typographyTextAlignLeft} from "../../../themes/commonStyles";
+import {typographyTextAlignLeft} from "../../../themes/commonStyles";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import {MenuItem, Select} from "@mui/material";
+import {MenuItem} from "@mui/material";
 import Button from "@mui/material/Button";
 import {createPost} from "../../../Services/Post/PostServices";
 import CardContent from "@mui/material/CardContent";
@@ -22,9 +20,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import NumericFormatCustom from "../../../Helper/NumericFormatCustom";
 import RequiredComponent from "../../../Helper/RequiredComponent";
 import createPostSchema from "./createPostSchema";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const CreatePost = () => {
     const {mutate} = useMutation(createPost)
+    const [imagesUpload, setImagesUpload] = useState([])
     const userId = 2;
     const defaultValue = {
         title: '',
@@ -34,15 +34,36 @@ const CreatePost = () => {
         price: '',
         detailAddress: '',
         typeOfApartment: 'Room',
-        authorId: ''
+        authorId: '',
+        images: []
     }
-    const {handleSubmit, control, formState: {errors}} = useForm({
-        resolver: yupResolver(createPostSchema)
+    const {handleSubmit, control, formState: {errors}, setValue, getValues} = useForm({
+        resolver: yupResolver(createPostSchema),
+        defaultValues: defaultValue
     });
     const TYPE_OF_APARTMENT = [
         'Room',
         'Apartment'
     ]
+
+    const handleFileUpload = (e) => {
+        if (!e.target.files) {
+            return;
+        }
+        const files = Object.values(e.target.files);
+        let imagesData = [];
+        files.forEach((file, index) => {
+            imagesData = [...imagesData, {name: file.name, src: URL.createObjectURL(file)}]
+        })
+        setValue('images', [...getValues('images'), ...files])
+        setImagesUpload([...imagesUpload, ...imagesData])
+    }
+
+    const handleRemoveImage = image => () => {
+        setImagesUpload(imagesUpload.filter(item => item.name !== image.name));
+        setValue('images', getValues('images').filter(item => item.name !== image.name))
+    }
+
     const onSubmit = data => {
         const additionalData = {
             authorId: userId,
@@ -62,7 +83,7 @@ const CreatePost = () => {
             <Container maxWidth="lg">
                 <Card className="card-common" sx={{minWidth: 275, marginTop: '30px'}}>
                     <CardContent>
-                        <Grid container spacing={3} sx={{width:{xs:'100%', sm:'80%'}, margin: '0 auto'}}>
+                        <Grid container spacing={3} sx={{width: {xs: '100%', sm: '80%'}, margin: '0 auto'}}>
                             <Grid item xs={12}>
                                 <Typography variant="h4"
                                             gutterBottom>Create Post</Typography>
@@ -252,6 +273,60 @@ const CreatePost = () => {
                                                    helperText={errors?.description && errors?.description?.message}
                                                    rows={4} fullWidth value={value}/>
                                     )}/>
+                            </Grid>
+
+                            <Grid item xs={12}
+                                  sm={3}
+                            >
+                                <Typography variant="h6" style={{...typographyTextAlignLeft}}
+                                            gutterBottom>Image<RequiredComponent/></Typography>
+                            </Grid>
+
+                            <Grid item xs={12} sx={{display: {sm: 'flex'}}}
+                                  sm={9}
+                            >
+                                <Controller
+                                    control={control}
+                                    name="description"
+                                    defaultValue={defaultValue.description}
+                                    render={({field: {onChange, onBlur, value, ref}}) => (
+                                        <Button
+                                            variant="contained"
+                                            component="label"
+                                        >
+                                            Upload Image
+                                            <input
+                                                type="file"
+                                                hidden
+                                                multiple
+                                                accept="image/*"
+                                                onChange={handleFileUpload}
+                                            />
+                                        </Button>
+                                    )}/>
+                            </Grid>
+
+                            <Grid item sm={3}></Grid>
+                            <Grid item xs={12} sx={{minHeight: 250}}
+                                  sm={9}
+                            >
+                                <Grid container spacing={2}>
+                                    {
+                                        imagesUpload.length > 0 && imagesUpload.map((item, index) =>
+                                            <Grid item sm={12} md={6} lg={4} xs={12} key={index}>
+                                                <div style={{display: 'inline-block', position: 'relative'}}>
+                                                    <img
+                                                        width={200}
+                                                        style={{objectFit: 'contain'}}
+                                                        height={200}
+                                                        src={item.src}
+                                                        alt={`images-${index}`}/>
+                                                    <CancelIcon onClick={handleRemoveImage(item)} className='icon-close'/>
+                                                </div>
+                                            </Grid>
+                                        )
+                                    }
+                                </Grid>
                             </Grid>
                         </Grid>
                     </CardContent>
