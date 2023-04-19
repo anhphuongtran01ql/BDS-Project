@@ -7,7 +7,6 @@ const fetchAllUsers = async () => {
     `${Global.BASE_API_PATH}/api/v1/user/list`,
     authHeader()
   );
-  //   console.log("data services", data);
   return data;
 };
 

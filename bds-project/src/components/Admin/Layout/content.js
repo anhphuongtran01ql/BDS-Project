@@ -53,7 +53,6 @@ export default function Content() {
     queryKey: ["users"],
     queryFn: () => fetchAllUsers(),
   });
-  // console.log("data", data);
   if (isLoading) {
     return <>Loading</>;
   }
@@ -68,12 +67,12 @@ export default function Content() {
       ) : (
         <>
           <Grid item>
-            <Grid
+            {/* <Grid
               item
               sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}
             >
               <Button variant="contained">Add user</Button>
-            </Grid>
+            </Grid> */}
             <AppBar
               position="static"
               color="default"
@@ -138,13 +137,7 @@ export default function Content() {
                               {list.roleList[0].roleName}
                             </StyledTableCell>
                             <StyledTableCell>
-                              <UserDetailInfo userId={1} />
-                              <BiEdit size={18} style={{ marginRight: 5 }} />
-                              <AiOutlineDelete
-                                size={18}
-                                style={{ marginRight: 5 }}
-                                color="red"
-                              />
+                              <UserDetailInfo userId={list.userId} />
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}

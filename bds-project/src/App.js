@@ -26,7 +26,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
 
           <Route exact path="/" element={<PrivateRoute />}>
-            <Route path="/admin" element={<AdminHomepage />}>
+            <Route exact path="/admin" element={<AdminHomepage />}>
               <Route path="/admin/list-users" element={<Content />}></Route>
               <Route
                 path="/admin/list-users/:userId"
