@@ -16,3 +16,11 @@ export const locationsTab = [
   { id: 5, label: "National Parks", icon: <GiKidSlide size={24} /> },
   { id: 6, label: "Bed & Breakfast ", icon: <AiOutlineCoffee size={24} /> },
 ];
+
+export const rolesList = [
+  { roleCode: "admin", roleName: "admin" },
+  { roleCode: "lessor", roleName: "lessor" },
+  { roleCode: "tenant", roleName: "tenant" },
+];
+
+export const genders = ["Male", "Female"];
