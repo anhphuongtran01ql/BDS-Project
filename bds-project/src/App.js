@@ -8,6 +8,7 @@ import { SnackBarContext } from "./context/snackbarContext";
 import { useState } from "react";
 import AlertMassage from "./components/Layout/AlertMessage";
 import DetailsPost from "./components/Post";
+import CreatePost from "./components/Post/Create/CreatePost";
 import AdminHomepage from "./components/Admin/Homepage";
 import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<ClientLayout />}>
             <Route path="/" element={<Homepage />}></Route>
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
+            <Route path="/post/create" element={<CreatePost />}></Route>
           </Route>
 
           <Route path="/login" element={<Login />}></Route>

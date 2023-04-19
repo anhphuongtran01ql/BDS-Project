@@ -28,6 +28,15 @@ const createComment = async (data) => {
   return response?.data;
 }
 
+const createPost = async (data) => {
+  const response = await axios.post(
+      `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create post api
+      data,
+      authHeader()
+  );
+  return response?.data;
+}
+
 const editComment = async (data) => {
   const response = await axios.put(
       `${Global.BASE_API_PATH}/api/v1/post/`, // change to edit comment api
@@ -48,4 +57,4 @@ const fetchCommentByPostId = async (postId) => {
 }
 
 
-export {fetchAllPosts, fetchPostById, createComment, fetchCommentByPostId, editComment};
+export {fetchAllPosts, fetchPostById, createComment, fetchCommentByPostId, editComment, createPost};
