@@ -31,6 +31,8 @@ export const fullWidthFlex = {
 
 export const justifyCenter = { display: "flex", justifyContent: "center" };
 
+export const typographyTextAlignLeft = {paddingLeft: 0, textAlign: "left"};
+
 export const dFlex = {
   display: "flex",
   flexDirection: "row",

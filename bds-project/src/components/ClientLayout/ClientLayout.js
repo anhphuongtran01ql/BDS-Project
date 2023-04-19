@@ -12,8 +12,11 @@ import Footer from "../Layout/Footer";
 import MobileFooter from "../Layout/MobileFooter";
 import FooterMenu from "../Layout/FooterMenu";
 import OptionsTab from "../Layout/OptionsTab";
+import { useLocation } from "react-router-dom";
 
 const ClientLayout = () => {
+  const location = useLocation();
+
   return (
     <>
       <CssBaseline />
@@ -26,7 +29,7 @@ const ClientLayout = () => {
       >
         <Box>
           <Header />
-          <OptionsTab />
+          {location.pathname === "/post" ? <OptionsTab /> : null}
         </Box>
         <Box
           sx={{

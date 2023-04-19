@@ -1,0 +1,51 @@
+.button-show-all-image {
+    position: absolute !important;
+    bottom: 10px;
+    right: 10px;
+}
+
+.MuiImageListItem-img {
+    height: 200px !important;
+}
+
+ul {
+    white-space: nowrap;
+    padding-left: 0;
+    margin-top: 0;
+}
+
+li {
+    display: inline;
+}
+
+.reserve-card {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
+    z-index: 1000;
+}
+
+.content {
+    white-space: normal;
+    text-align: left;
+}
+
+.comments {
+    display: flex;
+    justify-content: space-between
+}
+
+@media screen and (min-width: 600px ) {
+    .MuiImageListItem-img {
+        height: auto !important;
+    }
+    .reserve-card {
+        position:relative;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 12px !important;
+        padding: 24px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px !important;
+    }
+}
