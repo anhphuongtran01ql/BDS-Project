@@ -18,12 +18,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import CommentEditComponent from "./CommentEditComponent";
 import { GetCurrentId } from "../../Auth/Authorization/getUserInfo";
 
-const ReviewsComponent = () => {
+const ReviewsComponent = ({setTotalReview}) => {
   const { mutate } = useMutation(createComment);
   const { postId } = useParams();
   const queryClient = useQueryClient();
   const userId = GetCurrentId();
-
+  
   const [comment, setComment] = useState("");
   const {
     data: comments,
@@ -33,6 +33,8 @@ const ReviewsComponent = () => {
     queryKey: ["commentsByPostId", postId],
     queryFn: () => fetchCommentByPostId(postId),
   });
+
+  setTotalReview(comments ? comments.length : 0);
 
   const onEnter = (e) => {
     if (e.keyCode === 13) {
