@@ -16,12 +16,13 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import CommentEditComponent from "./CommentEditComponent";
+import { GetCurrentId } from "../../Auth/Authorization/getUserInfo";
 
 const ReviewsComponent = () => {
   const { mutate } = useMutation(createComment);
   const { postId } = useParams();
   const queryClient = useQueryClient();
-  const userId = 3;
+  const userId = GetCurrentId();
 
   const [comment, setComment] = useState("");
   const {
@@ -76,28 +77,26 @@ const ReviewsComponent = () => {
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {comments &&
               comments.map((user, index) => (
-                <div key={index}>
+                <div key={index} style={{ margin: "30px 0" }}>
                   <ListItem sx={{ paddingLeft: 0 }}>
                     <ListItemAvatar>
                       <Avatar sx={{ marginRight: 0 }}>
                         <AccountCircleIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText
-                      primary={user.name ?? "quang"}
-                      secondary={user.date ?? Date.now()}
-                    />
+                    <ListItemText primary={`${user.userId}` ?? "username"} />
                   </ListItem>
                   <CommentEditComponent
                     commentValue={user.comment}
-                    commentId={user.commentId}
+                    commentId={user.commentPostId}
                     userId={userId}
                     commentUserId={user.userId}
+                    postId={user.postId}
                   />
                 </div>
               ))}
           </List>
-          <Button variant="outlined">Show all comments</Button>
+          {/* <Button variant="outlined">Show all comments</Button> */}
         </>
       )}
     </>
