@@ -47,7 +47,6 @@ const editComment = async (data) => {
 };
 
 const fetchCommentByPostId = async (postId) => {
-  console.log(`${Global.BASE_API_PATH}/api/v1/comment/list/${postId}`);
   //change to api get comment by PostId
   const { data } = await axios.get(
     `${Global.BASE_API_PATH}/api/v1/comment/list/${postId}`,

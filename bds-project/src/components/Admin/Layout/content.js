@@ -1,7 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -16,8 +15,6 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { BiEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
 import { styled } from "@mui/material/styles";
 import UserDetailInfo from "../Users/detail";
 

@@ -17,7 +17,7 @@ import {
   typographyTextAlignLeft,
 } from "../../themes/commonStyles";
 import { Divider } from "@mui/material";
-import { itemData, postData } from "../../data/postData";
+import { itemData } from "../../data/postData";
 import ShowAllImage from "./Detail/ShowAllImage";
 
 import AppsIcon from "@mui/icons-material/Apps";
@@ -26,6 +26,7 @@ import ImageComponent from "./Detail/ImageComponent";
 import Typography from "@mui/material/Typography";
 import ReserveCard from "./Detail/ReserveCard";
 import ReviewsComponent from "./Detail/ReviewsComponent";
+import NoImage from "../../../src/assets/No_Image_Available.jpg";
 
 function DetailsPost() {
   const { postId } = useParams();
@@ -34,7 +35,7 @@ function DetailsPost() {
   const [imagePreview, setImagePreview] = useState({});
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.up("sm"));
-const [reviews, setReviews] = useState(0)
+  const [reviews, setReviews] = useState(0);
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
@@ -50,9 +51,9 @@ const [reviews, setReviews] = useState(0)
     setShowPreviewImage(true);
   };
 
-  const setTotalReview =(totalReviews) => {
-    setReviews(totalReviews)
-  }
+  const setTotalReview = (totalReviews) => {
+    setReviews(totalReviews);
+  };
 
   return (
     <>
@@ -80,7 +81,7 @@ const [reviews, setReviews] = useState(0)
                 <div style={{ position: "relative" }}>
                   <ImageComponent
                     // ref={useRef().current}
-                    image={itemData[0]}
+                    image={data?.imageUrls[0] ?? itemData[0]}
                     style={{
                       borderRadius: 4,
                       display: "block",
@@ -108,7 +109,7 @@ const [reviews, setReviews] = useState(0)
                 <Grid item xs={5}>
                   <ImageList
                     sx={{
-                      width: { xs: "auto", sm: 500 },
+                      width: { xs: "200px", sm: 500 },
                       overflowY: "unset",
                       marginTop: 0,
                       marginBottom: 0,
@@ -116,14 +117,15 @@ const [reviews, setReviews] = useState(0)
                     cols={matchesXs ? 2 : 1}
                     gap={10}
                   >
-                    {itemData.map((item, index) => {
+                    {data.imageUrls.map((item, index) => {
                       if (index !== 0 && index < 5) {
                         if (index === 4) {
                           return (
                             <div style={{ position: "relative" }} key={index}>
                               <ImageListItem>
                                 <ImageComponent
-                                  image={item}
+                                  image={item ?? NoImage}
+                                  height={245}
                                   style={{
                                     borderRadius: 4,
                                   }}
@@ -152,6 +154,7 @@ const [reviews, setReviews] = useState(0)
                               style={{
                                 borderRadius: 4,
                               }}
+                              height={245}
                               customFilterImage="?w=164&h=164&fit=crop&auto=format"
                               onPreviewClick={handleImagePreview}
                             />
@@ -258,8 +261,9 @@ const [reviews, setReviews] = useState(0)
               margin: "90px auto",
             }}
           >
-            <ShowAllImage itemData={itemData} 
-            // ref={useRef().current} 
+            <ShowAllImage
+              itemData={data.imageUrls}
+              // ref={useRef().current}
             />
           </Modal>
 
@@ -278,7 +282,7 @@ const [reviews, setReviews] = useState(0)
             }}
           >
             <ImageComponent
-            //   ref={useRef().current}
+              //   ref={useRef().current}
               image={imagePreview}
               style={{
                 borderRadius: 4,

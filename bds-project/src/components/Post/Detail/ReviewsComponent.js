@@ -5,7 +5,6 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -14,7 +13,6 @@ import {
 } from "../../../Services/Post/PostServices";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
 import CommentEditComponent from "./CommentEditComponent";
 import { GetCurrentId } from "../../Auth/Authorization/getUserInfo";
 

@@ -24,12 +24,11 @@ import {
 } from "../../themes/commonStyles";
 import "./CarouselCard.css";
 import NoImageAvailable from "../../assets/No_Image_Available.jpg";
+import { Link } from "react-router-dom";
 
-const CarouselCard = ({ post }) => {
-  // console.log("post", post);
+const CarouselCard = ({ post, onClick = null }) => {
   const [activeStep, setActiveStep] = React.useState(0);
-
-  // const maxSteps = post.imageUrl.length;
+  const maxSteps = post?.imageUrls.length;
   // so that we know how many dots
 
   const handleNext = () => {
@@ -55,96 +54,115 @@ const CarouselCard = ({ post }) => {
         <FaRegHeart size={24} color="#fff" />
       </Box>
 
-      {post.imageUrl && post.imageUrl.length ? (
-        <SwipeableViews
-          axis={"x"}
-          index={activeStep}
-          onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
-          {post.imageUrl && (
-            // post.imageUrl.map((step) => {
-            //   console.log("Step", step);
-            //   return (
-            //     <div>
-            //       <Box component="img" sx={carouselImage} src={step}></Box>
-            //     </div>
-            //   );
-            // })
-            <Box component="img" sx={carouselImage} src={post.imageUrl}></Box>
-          )}
-        </SwipeableViews>
+      <Link
+        to={`/post/${post.postId}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        {post.imageUrls && post.imageUrls.length ? (
+          <SwipeableViews
+            axis={"x"}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+          >
+            {
+              post.imageUrls &&
+                post.imageUrls.map((step) => {
+                  return (
+                    <div>
+                      {/* <Box component="img" sx={carouselImage} src={step}></Box> */}
+                      <Box component="img" sx={carouselImage} src={step}></Box>
+                    </div>
+                  );
+                })
+              // <Box component="img" sx={carouselImage} src={post.imageUrls}></Box>
+            }
+          </SwipeableViews>
+        ) : (
+          <>
+            <Box
+              component="img"
+              sx={carouselImage}
+              src={NoImageAvailable}
+            ></Box>
+          </>
+        )}
+      </Link>
+
+      {post.imageUrls && post.imageUrls.length ? (
+        <Box sx={fixedBottom}>
+          <MobileStepper
+            sx={{ backgroundColor: "transparent" }}
+            steps={maxSteps}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              <Button
+                size="small"
+                sx={carouselDot}
+                onClick={handleNext}
+                disabled={activeStep === maxSteps - 1}
+              >
+                <KeyboardArrowRight />
+              </Button>
+            }
+            backButton={
+              <Button
+                size="small"
+                sx={carouselDot}
+                onClick={handleBack}
+                disabled={activeStep === 0}
+              >
+                <KeyboardArrowLeft />
+              </Button>
+            }
+          />
+        </Box>
       ) : (
-        <>
-          <Box component="img" sx={carouselImage} src={NoImageAvailable}></Box>
-        </>
+        ""
       )}
 
-      {/* <Box sx={fixedBottom}>
-        <MobileStepper
-          sx={{ backgroundColor: "transparent" }}
-          steps={maxSteps}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            <Button
-              size="small"
-              sx={carouselDot}
-              onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
+      <Link
+        to={`/post/${post.postId}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <Box sx={flexBetween}>
+          <Box sx={{ mt: 2 }}>
+            <Typography
+              component="div"
+              align="left"
+              sx={{ fontSize: 20, fontWeight: "bold", padding: "0 8px" }}
             >
-              <KeyboardArrowRight />
-            </Button>
-          }
-          backButton={
-            <Button
-              size="small"
-              sx={carouselDot}
-              onClick={handleBack}
-              disabled={activeStep === 0}
+              {post.postTitle}
+            </Typography>
+            <Typography
+              component="div"
+              align="left"
+              sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
             >
-              <KeyboardArrowLeft />
-            </Button>
-          }
-        />
-      </Box> */}
+              <span>
+                <i>{post.detailsAddress} </i>
+              </span>
+              <span> | </span>
+              <span> {post.typeOfApartment}</span>
+            </Typography>
 
-      <Box sx={flexBetween}>
-        <Box sx={{ mt: 2 }}>
-          <Typography
-            component="div"
-            align="left"
-            sx={{ fontSize: 20, fontWeight: "bold", padding: "0 8px" }}
-          >
-            {post.postTitle}
-          </Typography>
-          <Typography
-            component="div"
-            align="left"
-            sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
-          >
-            <span>
-              <i>{post.detailsAddress} </i>
-            </span>
-            <span> | </span>
-            <span> {post.typeOfApartment}</span>
-          </Typography>
-
-          <Typography
-            component="h5"
-            align="left"
-            sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
-          >
-            <strong>${post.price}</strong>/night
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <Box sx={{ ...dFlex, alignItems: "center" }}>
-            <AiFillHeart size={16} color="red" />
-            <Typography component="h5"> {post.totalLike}</Typography>
+            <Typography
+              component="h5"
+              align="left"
+              sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
+            >
+              <strong>${post.price}</strong>/night
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Box sx={{ ...dFlex, alignItems: "center" }}>
+              <AiFillHeart size={16} color="red" />
+              <Typography component="h5"> {post.totalLike}</Typography>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Link>
     </Box>
   );
 };
