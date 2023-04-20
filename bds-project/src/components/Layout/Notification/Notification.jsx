@@ -1,62 +1,52 @@
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import {Badge, Menu} from "@mui/material";
+import {Badge, Divider, Menu} from "@mui/material";
 import Fade from "@mui/material/Fade";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import NotificationComment from "./NotificationComment";
 import {useNavigate} from "react-router";
-import {useQuery} from "@tanstack/react-query";
-import {fetchNotifications} from "../../../Services/Notification/NotificationServices";
+import useFetchNotifications from "../../../CustomHook/useFetchNotifications";
+import Typography from "@mui/material/Typography";
 
 const Notification = () => {
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(0);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
 
     const userId = 2; // change to getUserId
-    // const {data: notifications, isLoading, isFetching} = useQuery({
-    //     queryKey: ["notifications", userId],
-    //     queryFn: () => fetchNotifications(userId),
-    // });
-
-    const NOTIFICATIONLIST = [
-        {
-            postId: 8,
-            notificationId: 1,
-            notificationContent: 'Quang Nguyen has comment on your post Cho Thue Nha Quan Go Vap',
-            senderId: 2,
-            isRead: false,
-        },
-        {
-            postId: 9,
-            notificationId: 2,
-            notificationContent: 'Phương Trần has comment on your post Cho Thue Nha Quan Go Vap',
-            senderId: 3,
-            isRead: false,
-        }
-    ]
-
-    const [notifications, setNotifications] = useState(NOTIFICATIONLIST);
-
+    const {
+        notifications,
+        total,
+        loading,
+        error,
+        invalidateQuery,
+        handleClickOpenNotification
+    } = useFetchNotifications(userId);
 
     const handleClick = (e) => {
         setCount(0);
+        handleClickOpenNotification();
         setAnchorEl(e.currentTarget);
     }
 
     const handleDetailClick = (notificationData) => {
-        const indexNotification = notifications.findIndex((item) => item.notificationId === notificationData.notificationId)
-        notifications[indexNotification].isRead = true;
-        setNotifications(notifications)
+        invalidateQuery();
         setAnchorEl(null);
-        navigate(`/post/${notificationData.postId}`)
+        navigate(`/post/${notificationData.postId}`);
     }
+
+    useEffect(() => {
+        if (loading === false) {
+            setCount(total);
+        }
+    }, [loading, notifications])
 
     const handleClose = () => {
         setAnchorEl(null);
+        handleClickOpenNotification();
     };
     return (
-        <Badge color="secondary" badgeContent={count}>
+        <Badge color='secondary' badgeContent={count}>
             <NotificationsIcon onClick={handleClick}/>
             <Menu
                 id='fade-menu'
@@ -67,13 +57,30 @@ const Notification = () => {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                transformOrigin={{vertical: 'top', horizontal: 'center'}}
                 TransitionComponent={Fade}
             >
-                <div style={{maxWidth: '350px'}}>
+                {/*handle case no notifications new*/}
+                <div style={{width: '350px', minHeight: notifications.length > 0 ? 'auto' : '30vh', maxHeight: '50vh'}}>
+                    <Typography variant='h5' sx={{paddingLeft: '16px'}} gutterBottom>Notifications</Typography>
+                    <Divider sx={{margin: '0 16px'}}/>
                     {
-                        notifications.map((item, index) =>
-                            <NotificationComment item={item} key={index} handleDetailClick={handleDetailClick} userId = {userId}/>
-                        )
+                        notifications.length > 0 ?
+
+                            notifications.map((item, index) =>
+                                <NotificationComment item={item} key={index}
+                                                     handleDetailClick={handleDetailClick}
+                                                     userId={userId}/>
+                            ) :
+                            <Typography variant='h6' sx={{
+                                paddingLeft: '16px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                height: '200px',
+                                opacity: '0.6',
+                                alignItems: 'center'
+                            }} gutterBottom>{error !== '' ? error : 'You have no Notification'}</Typography>
                     }
                 </div>
             </Menu>

@@ -9,20 +9,18 @@ import {updateNotification} from "../../../Services/Notification/NotificationSer
 const NotificationComment = ({item, handleDetailClick, userId}) => {
     const [isRead, setIsRead] = useState(false)
     const {mutate} = useMutation(updateNotification);
-    const queryClient = useQueryClient();
 
     const handleClick = () => {
         setIsRead(true)
-        // mutate({notificationId: item.notificationId, isRead: true}, {
-        //     onSuccess: (data) => {
-        //         queryClient.invalidateQueries({queryKey: ["notifications", userId]});
-        //         console.log('success')
-        //     },
-        //     onError: (error) => {
-        //         console.log(error)
-        //     },
-        // })
-        handleDetailClick(item)
+        mutate({notificationId: item.notificationId, isRead: true, receiverId: userId}, {
+            onSuccess: (data) => {
+                handleDetailClick(item)
+                console.log('success')
+            },
+            onError: (error) => {
+                console.log(error)
+            },
+        })
     }
 
     return (

@@ -4,7 +4,7 @@ import {authHeader} from "../../Helper/AuthHeader";
 
 const updateNotification = async (data) => {
     const response = await axios.put(
-        `${Global.BASE_API_PATH}/api/v1/notification/`, // change to edit comment api
+        `${Global.BASE_API_PATH}/api/v1/notifications/update`, // change to edit comment api
         data,
         authHeader()
     );
