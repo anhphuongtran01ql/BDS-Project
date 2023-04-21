@@ -11,10 +11,10 @@ const useFetchNotifications = (userId) => {
     const [refetch, setRefetch] = useState(true)
     const fetchNotification = async () => {
         await axios.get(
-            `${Global.BASE_API_PATH}/api/v1/notifications/list/${userId}`, authHeader()
+            `${Global.BASE_API_PATH}/api/v1/notification/receiver?receiverId=${userId}`, authHeader()
         ).then((response) => {
             setNotifications(response.data)
-            setTotal(response.data.filter((item) => item.isRead === false).length);
+            setTotal(response.data.filter((item) => item.read === false).length);
         }).catch((error) => setError('unable to get Notifications')
         );
         setLoading(false);

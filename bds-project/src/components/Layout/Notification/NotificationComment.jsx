@@ -12,7 +12,7 @@ const NotificationComment = ({item, handleDetailClick, userId}) => {
 
     const handleClick = () => {
         setIsRead(true)
-        mutate({notificationId: item.notificationId, isRead: true, receiverId: userId}, {
+        mutate({notificationId: item.notificationId, read: true, receiverId: userId}, {
             onSuccess: (data) => {
                 handleDetailClick(item)
                 console.log('success')
@@ -33,7 +33,7 @@ const NotificationComment = ({item, handleDetailClick, userId}) => {
                     {item.notificationContent}
                 </Grid>
                 <Grid item xs={1} style={{display: 'flex', alignItems: 'center'}}>
-                    {!isRead && !item.isRead &&
+                    {!isRead && !item.read &&
                         <FiberManualRecordIcon style={{fontSize: '12px', color: 'hsl(214, 100%, 59%)'}}/>}
                 </Grid>
             </Grid>
