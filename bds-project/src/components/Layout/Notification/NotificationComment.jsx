@@ -24,7 +24,7 @@ const NotificationComment = ({item, handleDetailClick, userId}) => {
     }
 
     return (
-        <MenuItem style={{whiteSpace: 'normal', minHeight: '70px'}} onClick={handleClick}>
+        <MenuItem style={{whiteSpace: 'normal', minHeight: '70px', width:'340px'}} onClick={handleClick}>
             <Grid container spacing={1}>
                 <Grid item xs={2}>
                     <BackgroundLetterAvatars name={item.notificationContent.split('has comment on your post')[0]}/>
