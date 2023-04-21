@@ -18,4 +18,13 @@ const fetchUserById = async (id) => {
   return data;
 };
 
-export { fetchAllUsers, fetchUserById };
+const getUserByUsername = async (username) => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/user/find/${username}`,
+    authHeader()
+  );
+  console.log("dataSearch", data);
+  return data;
+};
+
+export { fetchAllUsers, fetchUserById, getUserByUsername };

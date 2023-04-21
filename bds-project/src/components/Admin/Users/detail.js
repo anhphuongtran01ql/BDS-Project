@@ -43,14 +43,14 @@ const gridTextField = {
 
 export function UserInfo() {
   const { userId } = useParams();
-  console.log("userId", userId);
+  // console.log("userId", userId);
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["user", userId],
     queryFn: () => fetchUserById(userId),
   });
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const {
     handleSubmit,

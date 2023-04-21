@@ -6,8 +6,11 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../../Services/User/UserServices";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchAllUsers,
+  getUserByUsername,
+} from "../../../Services/User/UserServices";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -46,6 +49,25 @@ export default function Content() {
     { label: "Detail" },
   ];
 
+  const [search, setSearch] = React.useState("");
+  const {
+    data: users,
+    isLoadingUser,
+    isFetchingUser,
+  } = useQuery({
+    queryKey: ["users", search],
+    queryFn: () => getUserByUsername(search),
+  });
+  const queryClient = useQueryClient();
+
+  const onSearch = (e) => {
+    console.log("value", search);
+    if(e.keyCode=== 13) {
+      queryClient.invalidateQueries({queryKey: ["users", search]});
+    }
+  };
+
+  console.log('userscscsc',users)
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchAllUsers(),
@@ -84,7 +106,11 @@ export default function Content() {
               <Toolbar>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item>
-                    <SearchIcon color="inherit" sx={{ display: "block" }} />
+                    <SearchIcon
+                      color="inherit"
+                      sx={{ display: "block" }}
+                      onSearch={onSearch}
+                    />
                   </Grid>
                   <Grid item xs>
                     <TextField
@@ -95,6 +121,11 @@ export default function Content() {
                         sx: { fontSize: "default" },
                       }}
                       variant="standard"
+                      onInput={(e) => {
+                        setSearch(e.target.value);
+                      }}
+                      value={search}
+                      onKeyDown={onSearch}
                     />
                   </Grid>
                 </Grid>
