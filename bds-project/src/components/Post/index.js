@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPostById } from "../../Services/Post/PostServices";
 import { useQuery } from "@tanstack/react-query";
@@ -36,7 +36,8 @@ function DetailsPost() {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.up("sm"));
   const [reviews, setReviews] = useState(0);
-  const { data, isLoading, isFetching } = useQuery({
+  const [imageData, setImageData] = useState([]);
+  const { data, isLoading, isFetching, status } = useQuery({
     queryKey: ["post", postId],
     queryFn: () => fetchPostById(postId),
   });
@@ -55,6 +56,21 @@ function DetailsPost() {
     setReviews(totalReviews);
   };
 
+  useEffect(() => {
+    if (status === 'success' && setImageData.length < 5) {
+      let tempImagedata = [...data.imageUrls];
+      for(let i=0; i<5; i++ ){
+        if(tempImagedata[i] === undefined) {
+          tempImagedata[i] = NoImage;
+        }
+      }
+      setImageData(tempImagedata);
+    }
+  }
+  ,[status, data])
+
+  //check data.imageUrls.length = 0 then must show one image 
+
   return (
     <>
       {isLoading || isFetching ? (
@@ -69,6 +85,7 @@ function DetailsPost() {
               style={{ paddingTop: "90px" }}
             >
               <Grid item xs={12}>
+                {/* fix logic here */}
                 <Typography
                   variant="h3"
                   style={{ ...typographyTextAlignLeft }}
@@ -81,7 +98,7 @@ function DetailsPost() {
                 <div style={{ position: "relative" }}>
                   <ImageComponent
                     // ref={useRef().current}
-                    image={data?.imageUrls[0] ?? itemData[0]}
+                    image={data?.imageUrls[0] ?? NoImage}
                     style={{
                       borderRadius: 4,
                       display: "block",
@@ -117,19 +134,18 @@ function DetailsPost() {
                     cols={matchesXs ? 2 : 1}
                     gap={10}
                   >
-                    {data.imageUrls.map((item, index) => {
+                    {imageData.length > 0 && imageData.map((item, index) => {
                       if (index !== 0 && index < 5) {
                         if (index === 4) {
                           return (
                             <div style={{ position: "relative" }} key={index}>
                               <ImageListItem>
                                 <ImageComponent
-                                  image={item ?? NoImage}
+                                  image={item}
                                   height={245}
                                   style={{
                                     borderRadius: 4,
                                   }}
-                                  customFilterImage="?w=164&h=164&fit=crop&auto=format"
                                   onPreviewClick={handleImagePreview}
                                 />
                               </ImageListItem>
@@ -153,9 +169,10 @@ function DetailsPost() {
                               image={item}
                               style={{
                                 borderRadius: 4,
+                                display: "block",
+                                width: "100%",
                               }}
                               height={245}
-                              customFilterImage="?w=164&h=164&fit=crop&auto=format"
                               onPreviewClick={handleImagePreview}
                             />
                           </ImageListItem>

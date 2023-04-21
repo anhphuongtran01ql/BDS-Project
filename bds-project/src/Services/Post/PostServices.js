@@ -56,6 +56,24 @@ const fetchCommentByPostId = async (postId) => {
   return data;
 };
 
+const likePost = async (data) => {
+  const response = await axios.put(
+    `${Global.BASE_API_PATH}/api/v1/like/update`,
+    data,
+    authHeader()
+  );
+  return response?.data;
+};
+
+const createNewLike = async (data) => {
+  const response = await axios.post(
+    `${Global.BASE_API_PATH}/api/v1/like/new`,
+    data,
+    authHeader()
+  );
+  return response?.data;
+};
+
 export {
   fetchAllPosts,
   fetchPostById,
@@ -63,4 +81,6 @@ export {
   fetchCommentByPostId,
   editComment,
   createPost,
+  likePost,
+  createNewLike
 };

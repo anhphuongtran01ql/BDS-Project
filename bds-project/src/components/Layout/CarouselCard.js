@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import MobileStepper from "@mui/material/MobileStepper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-
+import { useQueryClient } from "@tanstack/react-query";
 // mui icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -26,10 +26,12 @@ import "./CarouselCard.css";
 import NoImageAvailable from "../../assets/No_Image_Available.jpg";
 import { Link } from "react-router-dom";
 
-const CarouselCard = ({ post, onClick = null }) => {
+const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
   const [activeStep, setActiveStep] = React.useState(0);
+
+  const [likeStatus, setLikeStatus] = useState(like.like);
   const maxSteps = post?.imageUrls.length;
-  // so that we know how many dots
+  const queryClient = useQueryClient();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
@@ -42,6 +44,46 @@ const CarouselCard = ({ post, onClick = null }) => {
   const handleStepChange = (step) => {
     setActiveStep(step); // handle swipe change
   };
+
+  const handleOnClickLove = () => {
+    if (like.hasOwnProperty("likePostId")) {
+      mutate(
+        {
+          likePostId: like.likePostId,
+          userId: like.userId,
+          postId: post.postId,
+          like: !likeStatus,
+        },
+        {
+          onSuccess: (data) => {
+            queryClient.invalidateQueries({
+              queryKey: ["likes-by-user-id", like.userId],
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        }
+      );
+    } else {
+      createNewLike(
+        { userId: userId, postId: post.postId, like: !likeStatus },
+        {
+          onSuccess: (data) => {
+            queryClient.invalidateQueries({
+              queryKey: ["likes-by-user-id", userId],
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        }
+      );
+    }
+
+    setLikeStatus(!likeStatus);
+  };
+
   return (
     <Box
       className="carouselCard"
@@ -51,7 +93,11 @@ const CarouselCard = ({ post, onClick = null }) => {
       }}
     >
       <Box sx={fixedIcon}>
-        <FaRegHeart size={24} color="#fff" />
+        {likeStatus === true && like.like === likeStatus ? (
+          <AiFillHeart onClick={handleOnClickLove} size={24} color="red" />
+        ) : (
+          <FaRegHeart onClick={handleOnClickLove} size={24} color="#fff" />
+        )}
       </Box>
 
       <Link
@@ -65,18 +111,19 @@ const CarouselCard = ({ post, onClick = null }) => {
             onChangeIndex={handleStepChange}
             enableMouseEvents
           >
-            {
-              post.imageUrls &&
-                post.imageUrls.map((step) => {
-                  return (
-                    <div>
-                      {/* <Box component="img" sx={carouselImage} src={step}></Box> */}
-                      <Box component="img" sx={carouselImage} src={step}></Box>
-                    </div>
-                  );
-                })
-              // <Box component="img" sx={carouselImage} src={post.imageUrls}></Box>
-            }
+            {post.imageUrls &&
+              post.imageUrls.map((step, index) => {
+                return (
+                  <div>
+                    <Box
+                      component="img"
+                      key={index}
+                      sx={carouselImage}
+                      src={step}
+                    ></Box>
+                  </div>
+                );
+              })}
           </SwipeableViews>
         ) : (
           <>

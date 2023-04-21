@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useEffect} from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -27,12 +28,17 @@ const ReviewsComponent = ({setTotalReview}) => {
     data: comments,
     isCommentsLoading,
     isCommentsFetching,
+    status
   } = useQuery({
     queryKey: ["commentsByPostId", postId],
     queryFn: () => fetchCommentByPostId(postId),
   });
 
-  setTotalReview(comments ? comments.length : 0);
+  useEffect(() => {
+    if(status === 'success') {
+      setTotalReview(comments ? comments.length : 0);
+    }
+  },[status, comments])
 
   const onEnter = (e) => {
     if (e.keyCode === 13) {

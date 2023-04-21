@@ -27,4 +27,12 @@ const getUserByUsername = async (username) => {
   return data;
 };
 
-export { fetchAllUsers, fetchUserById, getUserByUsername };
+const getLikesByUserId = async (userId) => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/like/list?userId=${userId}`,
+    authHeader()
+  );
+  return data;
+};
+
+export { fetchAllUsers, fetchUserById, getUserByUsername, getLikesByUserId };
