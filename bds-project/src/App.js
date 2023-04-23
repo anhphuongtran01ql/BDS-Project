@@ -13,6 +13,7 @@ import AdminHomepage from "./components/Admin/Homepage";
 import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
+import Messenger from "./components/Chat/Messenger";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Homepage />}></Route>
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
             <Route path="/post/create" element={<CreatePost />}></Route>
+            <Route path="/chat" element={<Messenger />}></Route>
           </Route>
 
           <Route path="/login" element={<Login />}></Route>
