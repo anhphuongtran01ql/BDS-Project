@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPostById } from "../../Services/Post/PostServices";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +17,6 @@ import {
   typographyTextAlignLeft,
 } from "../../themes/commonStyles";
 import { Divider } from "@mui/material";
-import { itemData } from "../../data/postData";
 import ShowAllImage from "./Detail/ShowAllImage";
 
 import AppsIcon from "@mui/icons-material/Apps";
@@ -57,19 +56,18 @@ function DetailsPost() {
   };
 
   useEffect(() => {
-    if (status === 'success' && setImageData.length < 5) {
+    if (status === "success" && setImageData.length < 5) {
       let tempImagedata = [...data.imageUrls];
-      for(let i=0; i<5; i++ ){
-        if(tempImagedata[i] === undefined) {
+      for (let i = 0; i < 5; i++) {
+        if (tempImagedata[i] === undefined) {
           tempImagedata[i] = NoImage;
         }
       }
       setImageData(tempImagedata);
     }
-  }
-  ,[status, data])
+  }, [status, data]);
 
-  //check data.imageUrls.length = 0 then must show one image 
+  //check data.imageUrls.length = 0 then must show one image
 
   return (
     <>
@@ -134,51 +132,52 @@ function DetailsPost() {
                     cols={matchesXs ? 2 : 1}
                     gap={10}
                   >
-                    {imageData.length > 0 && imageData.map((item, index) => {
-                      if (index !== 0 && index < 5) {
-                        if (index === 4) {
+                    {imageData.length > 0 &&
+                      imageData.map((item, index) => {
+                        if (index !== 0 && index < 5) {
+                          if (index === 4) {
+                            return (
+                              <div style={{ position: "relative" }} key={index}>
+                                <ImageListItem>
+                                  <ImageComponent
+                                    image={item}
+                                    height={245}
+                                    style={{
+                                      borderRadius: 4,
+                                    }}
+                                    onPreviewClick={handleImagePreview}
+                                  />
+                                </ImageListItem>
+                                <Button
+                                  variant="outlined"
+                                  className="button-show-all-image"
+                                  onClick={handleClickShowAll}
+                                >
+                                  <AppsIcon
+                                    fontVariant="outlined"
+                                    style={{ ...justifyCenter, marginRight: 5 }}
+                                  />
+                                  Show all photos
+                                </Button>
+                              </div>
+                            );
+                          }
                           return (
-                            <div style={{ position: "relative" }} key={index}>
-                              <ImageListItem>
-                                <ImageComponent
-                                  image={item}
-                                  height={245}
-                                  style={{
-                                    borderRadius: 4,
-                                  }}
-                                  onPreviewClick={handleImagePreview}
-                                />
-                              </ImageListItem>
-                              <Button
-                                variant="outlined"
-                                className="button-show-all-image"
-                                onClick={handleClickShowAll}
-                              >
-                                <AppsIcon
-                                  fontVariant="outlined"
-                                  style={{ ...justifyCenter, marginRight: 5 }}
-                                />
-                                Show all photos
-                              </Button>
-                            </div>
+                            <ImageListItem key={index}>
+                              <ImageComponent
+                                image={item}
+                                style={{
+                                  borderRadius: 4,
+                                  display: "block",
+                                  width: "100%",
+                                }}
+                                height={245}
+                                onPreviewClick={handleImagePreview}
+                              />
+                            </ImageListItem>
                           );
                         }
-                        return (
-                          <ImageListItem key={index}>
-                            <ImageComponent
-                              image={item}
-                              style={{
-                                borderRadius: 4,
-                                display: "block",
-                                width: "100%",
-                              }}
-                              height={245}
-                              onPreviewClick={handleImagePreview}
-                            />
-                          </ImageListItem>
-                        );
-                      }
-                    })}
+                      })}
                   </ImageList>
                 </Grid>
               )}
