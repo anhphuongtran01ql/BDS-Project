@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaRegUserCircle } from "react-icons/fa";
 import { flexCenter } from "../../themes/commonStyles";
+import Notification from "./Notification/Notification";
 
 const ProfileSettings = () => {
   return (
@@ -15,6 +16,9 @@ const ProfileSettings = () => {
         <p>Become A Host</p>
       </Link>
       <Stack>
+        <Button>
+          <Notification/>
+        </Button>
         <Button
           sx={{
             borderRadius: 10,
