@@ -45,8 +45,8 @@ function Logout() {
   return (
     <>
       <Button onClick={handleClickOpen} sx={{ padding: 0 }}>
-        <BiLogOutCircle size={24} />
-        <Typography>Logout</Typography>
+        <BiLogOutCircle size={24} className="logout-logo" />
+        <Typography className="logout-typo">Logout</Typography>
       </Button>
 
       <Dialog open={open} onClose={handleClose}>

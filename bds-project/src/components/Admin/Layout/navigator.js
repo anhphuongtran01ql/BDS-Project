@@ -9,6 +9,9 @@ import ListItemText from "@mui/material/ListItemText";
 import PeopleIcon from "@mui/icons-material/People";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { Link } from "react-router-dom";
+import Logout from "../../Auth/Authorization/Logout";
+import { MdOutlineApartment } from "react-icons/md";
+import "./layout.css";
 
 const item = {
   py: 1,
@@ -37,17 +40,19 @@ export default function Navigator(props) {
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem
-          sx={{
-            ...itemCategory,
-            fontSize: 22,
-            color: "#fff",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          BDS
-        </ListItem>
+        <Link to={"/"} style={{ textDecoration: "none" }}>
+          <ListItem
+            sx={{
+              ...itemCategory,
+              fontSize: 22,
+              color: "#fff",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            BDS
+          </ListItem>
+        </Link>
 
         <Box sx={{ bgcolor: "#101F33" }}>
           <List sx={{ margin: 0, padding: 0 }}>
@@ -80,11 +85,29 @@ export default function Navigator(props) {
                 </ListItemButton>
               </ListItem>
             </Link>
+
+            <Link to="/admin/list-users" style={{ textDecoration: "none" }}>
+              <ListItem disablePadding key={3}>
+                <ListItemButton
+                  sx={item}
+                  selected={selectedIndex === 3}
+                  onClick={(event) => handleListItemClick(event, 3)}
+                >
+                  <ListItemIcon>
+                    <MdOutlineApartment />
+                  </ListItemIcon>
+                  <ListItemText>Type of Apartments</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            </Link>
           </List>
 
           {/* <Divider sx={{ mt: 2 }} /> */}
         </Box>
       </List>
+      <div className="logout-box">
+        <Logout />
+      </div>
     </Drawer>
   );
 }

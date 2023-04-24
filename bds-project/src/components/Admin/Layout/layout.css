@@ -1,0 +1,14 @@
+.logout-box {
+    position: absolute;
+    bottom: 10px;
+    left: 80px;
+}
+
+p.MuiTypography-root.MuiTypography-body1.logout-typo.css-ahj2mt-MuiTypography-root {
+    color: #fff;
+    margin-left: 10px;
+}
+
+svg.logout-logo {
+    color: #fff;
+}

@@ -6,4 +6,12 @@ const login = async (data) => {
   return response;
 };
 
-export { login };
+const register = async (data) => {
+  const response = await axios.post(
+    `${Global.BASE_API_PATH}/api/v1/user/new`,
+    data
+  );
+  return response;
+};
+
+export { login, register };

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,6 +16,7 @@ import { login } from "../../Services/Auth/Login";
 import { useContext } from "react";
 import { SnackBarContext } from "../../context/snackbarContext";
 import ParseJwt from "./ParseJwt";
+import { Link } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -27,7 +27,14 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <Link
+        to={"/"}
+        style={{
+          textDecoration: "none",
+          color: "rgba(0, 0, 0, 0.6)",
+          fontWeight: "bold",
+        }}
+      >
         BDS
       </Link>{" "}
       {new Date().getFullYear()}
@@ -153,7 +160,9 @@ export default function Login() {
 
               <Grid container sx={{ ...justifyCenter }}>
                 <Grid item>
-                  <Link href="#">{"Don't have an account? Sign Up"}</Link>
+                  <Link to={"/register"} style={{ textDecoration: "none" }}>
+                    {"Don't have an account? Sign Up"}
+                  </Link>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

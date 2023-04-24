@@ -13,6 +13,7 @@ import AdminHomepage from "./components/Admin/Homepage";
 import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
+import Register from "./components/Auth/Register";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -28,6 +29,7 @@ function App() {
           </Route>
 
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/register" element={<Register />}></Route>
 
           <Route exact path="/" element={<PrivateRoute />}>
             <Route exact path="/admin" element={<AdminHomepage />}>
