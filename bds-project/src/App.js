@@ -27,6 +27,7 @@ function App() {
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
             <Route path="/post/create" element={<CreatePost />}></Route>
             <Route path="/chat" element={<Messenger />}></Route>
+            <Route path="/chat/:id" element={<Messenger />}></Route>
           </Route>
 
           <Route path="/login" element={<Login />}></Route>
