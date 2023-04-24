@@ -20,6 +20,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import UserDetailInfo from "../Users/detail";
+import Loading from "../../Layout/Loading";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,18 +63,18 @@ export default function Content() {
 
   const onSearch = (e) => {
     console.log("value", search);
-    if(e.keyCode=== 13) {
-      queryClient.invalidateQueries({queryKey: ["users", search]});
+    if (e.keyCode === 13) {
+      queryClient.invalidateQueries({ queryKey: ["users", search] });
     }
   };
 
-  console.log('userscscsc',users)
+  // console.log("userscscsc", users);
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchAllUsers(),
   });
   if (isLoading) {
-    return <>Loading</>;
+    return <Loading/>;
   }
   if (isError) {
     return <>Error</>;
@@ -82,7 +83,7 @@ export default function Content() {
   return (
     <>
       {isLoading || isFetching ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <>
           <Grid item>

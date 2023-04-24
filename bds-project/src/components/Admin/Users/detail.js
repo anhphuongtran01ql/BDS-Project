@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import validateSchema from "./validate";
 import TextField from "@mui/material/TextField";
 import { rolesList, genders } from "../../../data/data";
+import Loading from "../../Layout/Loading";
 
 const textField = {
   marginBottom: 1,
@@ -75,7 +76,7 @@ export function UserInfo() {
   return (
     <>
       {isFetching || isLoading ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <>
           <Container sx={{ padding: "10px 20px" }}>

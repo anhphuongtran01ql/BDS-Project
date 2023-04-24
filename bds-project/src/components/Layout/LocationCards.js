@@ -13,6 +13,7 @@ import {
 } from "../../Services/Post/PostServices";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Pagination, Typography } from "@mui/material";
+import Loading from "./Loading";
 
 const LocationCards = () => {
   let [page, setPage] = useState(1);
@@ -50,7 +51,7 @@ const LocationCards = () => {
   const _DATA = UsePagination(postData, PER_PAGE);
 
   if (isLoading) {
-    return <>Loading</>;
+    return <Loading/>;
   }
 
   if (isError) {
@@ -72,7 +73,7 @@ const LocationCards = () => {
   return (
     <>
       {isLoading || isFetching ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <Box sx={{ mx: 2 }}>
           <Grid container rowSpacing={3} columnSpacing={3}>

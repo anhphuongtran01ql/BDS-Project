@@ -43,7 +43,6 @@ const useFetchNotifications = (userId) => {
             fetchFirstTime();
         }
             const interval = setInterval(async () => {
-                console.log('fetch interrval', refetch)
                 if (refetch === true) {
                     await fetchNotification();
                 }
