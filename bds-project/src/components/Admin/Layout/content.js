@@ -21,6 +21,8 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import UserDetailInfo from "../Users/detail";
 import Loading from "../../Layout/Loading";
+import { useState } from "react";
+import { Box, Pagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,7 +52,9 @@ export default function Content() {
     { label: "Detail" },
   ];
 
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
   const {
     data: users,
     isLoadingUser,
@@ -67,14 +71,27 @@ export default function Content() {
       queryClient.invalidateQueries({ queryKey: ["users", search] });
     }
   };
+  const PER_PAGE = 5;
 
-  // console.log("userscscsc", users);
+  let paramQuery = {
+    page: currentPage,
+    pageSize: PER_PAGE,
+  };
+
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => fetchAllUsers(),
+    queryKey: ["users", paramQuery],
+    queryFn: () => fetchAllUsers(paramQuery),
   });
+
+  // let countPage = Math.ceil(totalData / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+    // queryClient.invalidateQueries({ queryKey: ["posts", paramQuery] });
+  };
+
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
   if (isError) {
     return <>Error</>;
@@ -134,46 +151,44 @@ export default function Content() {
             </AppBar>
             <Paper sx={{ margin: "auto", overflow: "auto" }}>
               {data ? (
-                <>
-                  <TableContainer
-                    sx={{
-                      display: "table",
-                      tableLayout: "fixed",
-                    }}
-                  >
-                    <Table style={{ minWidth: 600 }}>
-                      <TableHead>
-                        <TableRow>
-                          {columns.map((column) => (
-                            <StyledTableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ minWidth: column.minWidth }}
-                            >
-                              {column.label}
-                            </StyledTableCell>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {data.map((list, index) => (
-                          <StyledTableRow key={list.username}>
-                            <StyledTableCell component="th" scope="row">
-                              {list.username}
-                            </StyledTableCell>
-                            <StyledTableCell>{list.email}</StyledTableCell>
-                            <StyledTableCell>
-                              {list.roleList[0].roleName}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <UserDetailInfo userId={list.userId} />
-                            </StyledTableCell>
-                          </StyledTableRow>
+                <TableContainer
+                  sx={{
+                    display: "table",
+                    tableLayout: "fixed",
+                  }}
+                >
+                  <Table style={{ minWidth: 600 }}>
+                    <TableHead>
+                      <TableRow>
+                        {columns.map((column) => (
+                          <StyledTableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ minWidth: column.minWidth }}
+                          >
+                            {column.label}
+                          </StyledTableCell>
                         ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.map((list, index) => (
+                        <StyledTableRow key={list.username}>
+                          <StyledTableCell component="th" scope="row">
+                            {list.username}
+                          </StyledTableCell>
+                          <StyledTableCell>{list.email}</StyledTableCell>
+                          <StyledTableCell>
+                            {list.roleList[0].roleName}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <UserDetailInfo userId={list.userId} />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               ) : (
                 <Typography
                   sx={{ my: 5, mx: 2 }}
@@ -184,6 +199,18 @@ export default function Content() {
                 </Typography>
               )}
             </Paper>
+            <Pagination
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "25px",
+              }}
+              size="middle"
+              color="primary"
+              count={3}
+              page={currentPage}
+              onChange={handleChange}
+            />
           </Grid>
         </>
       )}

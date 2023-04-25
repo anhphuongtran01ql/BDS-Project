@@ -2,9 +2,11 @@ import axios from "axios";
 import Global from "../../global";
 import { authHeader } from "../../Helper/AuthHeader";
 
-const fetchAllUsers = async () => {
+const fetchAllUsers = async (paramQuery) => {
   const { data } = await axios.get(
-    `${Global.BASE_API_PATH}/api/v1/user/list`,
+    `${Global.BASE_API_PATH}/api/v1/user/list?page=${
+      paramQuery.page - 1
+    }&size=${paramQuery.pageSize}`,
     authHeader()
   );
   return data;
@@ -40,7 +42,7 @@ const getLikesByUserId = async (userId) => {
 
 const editUser = async (data) => {
   const response = await axios.put(
-    `${Global.BASE_API_PATH}/api/v1/user/update`, 
+    `${Global.BASE_API_PATH}/api/v1/user/update`,
     data,
     authHeader()
   );

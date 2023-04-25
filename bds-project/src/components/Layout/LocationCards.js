@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CarouselCard from "./CarouselCard";
-import UsePagination from "./Pagination";
 import { useGetUserInfo } from "../Auth/Authorization/getUserInfo";
 import { getLikesByUserId } from "../../Services/User/UserServices";
 
@@ -10,27 +9,33 @@ import {
   fetchAllPosts,
   likePost,
   createNewLike,
+  getTotalPost,
 } from "../../Services/Post/PostServices";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pagination, Typography } from "@mui/material";
 import Loading from "./Loading";
 
 const LocationCards = () => {
-  let [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState(0);
-  const [postData, setPostData] = useState([]);
+  const PER_PAGE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { mutate } = useMutation(likePost);
   const { mutate: createLike } = useMutation(createNewLike);
 
-  const PER_PAGE = 15;
+  const queryClient = useQueryClient();
 
   let paramQuery = {
-    page: page,
+    page: currentPage,
     pageSize: PER_PAGE,
   };
 
+  const { data: totalData } = useQuery({
+    queryKey: ["total"],
+    queryFn: () => getTotalPost(),
+  });
+
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", paramQuery],
     queryFn: () => fetchAllPosts(paramQuery),
   });
 
@@ -40,15 +45,6 @@ const LocationCards = () => {
     queryFn: () => getLikesByUserId(userInfo ? userInfo.userId : null),
   });
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setPageCount(Math.ceil(data.length / PER_PAGE));
-      setPostData(data);
-    }
-  }, [data]);
-
-  const _DATA = UsePagination(postData, PER_PAGE);
-
   if (isLoading) {
     return <Loading />;
   }
@@ -57,9 +53,11 @@ const LocationCards = () => {
     return <>Error</>;
   }
 
-  const handleChange = (e, p) => {
-    setPage(p);
-    _DATA.jump(p);
+  let countPage = Math.ceil(totalData / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+    queryClient.invalidateQueries({ queryKey: ["posts", paramQuery] });
   };
 
   const findIsLike = (post) => {
@@ -104,14 +102,17 @@ const LocationCards = () => {
                 );
               })}
           </Grid>
-          {data?.length >= PER_PAGE && (
+          {totalData >= PER_PAGE && (
             <Pagination
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-              count={pageCount}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "15px",
+              }}
               size="large"
-              page={page}
-              variant="outlined"
-              color="secondary"
+              color="primary"
+              count={countPage}
+              page={currentPage}
               onChange={handleChange}
             />
           )}
