@@ -20,7 +20,7 @@ const fetchUserById = async (id) => {
 
 const getUserByUsername = async (username) => {
   const { data } = await axios.get(
-    `${Global.BASE_API_PATH}/api/v1/user/find/${username}`,
+    `${Global.BASE_API_PATH}/api/v1/user/find?username=${username}`,
     authHeader()
   );
   console.log("dataSearch", data);
@@ -38,4 +38,19 @@ const getLikesByUserId = async (userId) => {
   return [];
 };
 
-export { fetchAllUsers, fetchUserById, getUserByUsername, getLikesByUserId };
+const editUser = async (data) => {
+  const response = await axios.put(
+    `${Global.BASE_API_PATH}/api/v1/user/update`, 
+    data,
+    authHeader()
+  );
+  return response?.data;
+};
+
+export {
+  fetchAllUsers,
+  fetchUserById,
+  getUserByUsername,
+  getLikesByUserId,
+  editUser,
+};

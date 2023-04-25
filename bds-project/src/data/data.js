@@ -18,6 +18,7 @@ export const locationsTab = [
 ];
 
 export const rolesList = [
+  { roleCode: "admin", roleName: "admin" },
   { roleCode: "lessor", roleName: "lessor" },
   { roleCode: "tenant", roleName: "tenant" },
 ];
