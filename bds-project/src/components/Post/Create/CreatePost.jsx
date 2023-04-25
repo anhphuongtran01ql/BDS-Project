@@ -37,7 +37,7 @@ const CreatePost = () => {
     squareArea: 0,
     price: "",
     detailsAddress: "",
-    typeOfApartment: "Room",
+    typeOfApartment: "room",
     authorId: "",
     images: [],
     video: [],
@@ -52,7 +52,7 @@ const CreatePost = () => {
     resolver: yupResolver(createPostSchema),
     defaultValues: defaultValue,
   });
-  const TYPE_OF_APARTMENT = ["Room", "Apartment"];
+  const TYPE_OF_APARTMENT = ["room", "apartment"];
 
   const handleFileUpload = (e) => {
     if (!e.target.files) {
@@ -107,13 +107,27 @@ const CreatePost = () => {
       authorId: userId,
     };
     const finalData = { ...data, ...additionalData };
+
     var tempData = { ...finalData };
-    finalData.postDTO = { ...tempData };
-    delete finalData.postDTO.images;
-    delete finalData.postDTO.video;
-    finalData.postDTO = JSON.stringify(finalData.postDTO);
-    console.log("data", typeof finalData.postDTO);
-    mutate(finalData, {
+    
+    const json = JSON.stringify(tempData);
+    const blob = new Blob([json], {
+      type: 'application/json'
+    });
+    
+    const formData = new FormData();
+
+    data.video.forEach((file) => {
+      formData.append(`video`, file, file.name);
+    })
+
+    data.images.forEach((file) => {
+      formData.append(`images`, file, file.name);
+    })
+
+    formData.append("postDTO", blob);
+
+    mutate(formData, {
       onSuccess: (data) => {
         setSnackBarStatus({
           msg: "Create Successfully!",
@@ -123,7 +137,7 @@ const CreatePost = () => {
       },
       onError: (error) => {
         //show messae fail here
-        console.log("error", error);
+        // console.log("error", error);
       },
     });
   };
