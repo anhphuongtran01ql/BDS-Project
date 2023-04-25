@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CarouselCard from "./CarouselCard";
 import UsePagination from "./Pagination";
-import { GetCurrentId } from "../Auth/Authorization/getUserInfo";
+import { useGetUserInfo } from "../Auth/Authorization/getUserInfo";
 import { getLikesByUserId } from "../../Services/User/UserServices";
 
 import {
@@ -34,11 +34,10 @@ const LocationCards = () => {
     queryFn: () => fetchAllPosts(paramQuery),
   });
 
-  const userId = GetCurrentId();
-
+  const userInfo = useGetUserInfo();
   const { data: likes, status: likesStatus } = useQuery({
-    queryKey: ["likes-by-user-id", userId],
-    queryFn: () => getLikesByUserId(userId),
+    queryKey: ["likes-by-user-id", userInfo ? userInfo.userId : null],
+    queryFn: () => getLikesByUserId(userInfo ? userInfo.userId : null),
   });
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const LocationCards = () => {
   const _DATA = UsePagination(postData, PER_PAGE);
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -64,10 +63,15 @@ const LocationCards = () => {
   };
 
   const findIsLike = (post) => {
+    const falseObject = { like: false };
+    if (userInfo === null) {
+      return falseObject;
+    }
+
     const like = likes?.find(
-      (like) => like.postId === post.postId && like.userId === userId
+      (like) => like.postId === post.postId && like.userId === userInfo.userId
     );
-    return like ?? { like: false };
+    return like ?? falseObject;
   };
 
   return (
@@ -75,24 +79,28 @@ const LocationCards = () => {
       {isLoading || isFetching ? (
         <Loading />
       ) : (
-        <Box sx={{ mx: 2 }}>
+        <Box sx={{ mx: 2, my: 2 }}>
           <Grid container rowSpacing={3} columnSpacing={3}>
             {data?.length > 0 &&
               likesStatus === "success" &&
               data.map((post, index) => {
                 return (
-                  <>
-                    <Grid key={post.postId} item xs={12} sm={6} md={4} lg={3}>
-                      <CarouselCard
-                        post={post}
-                        like={findIsLike(post)}
-                        userId={userId}
-                        mutate={mutate}
-                        createNewLike={createLike}
-                        key={index}
-                      />
-                    </Grid>
-                  </>
+                  <Grid
+                    key={`carousel-${index}`}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                  >
+                    <CarouselCard
+                      post={post}
+                      like={findIsLike(post)}
+                      userId={userInfo ? userInfo.userId : null}
+                      mutate={mutate}
+                      createNewLike={createLike}
+                    />
+                  </Grid>
                 );
               })}
           </Grid>

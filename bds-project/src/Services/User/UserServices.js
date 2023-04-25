@@ -28,11 +28,14 @@ const getUserByUsername = async (username) => {
 };
 
 const getLikesByUserId = async (userId) => {
-  const { data } = await axios.get(
-    `${Global.BASE_API_PATH}/api/v1/like/list?userId=${userId}`,
-    authHeader()
-  );
-  return data;
+  if (userId !== null) {
+    const { data } = await axios.get(
+      `${Global.BASE_API_PATH}/api/v1/like/list?userId=${userId}`,
+      authHeader()
+    );
+    return data;
+  }
+  return [];
 };
 
 export { fetchAllUsers, fetchUserById, getUserByUsername, getLikesByUserId };

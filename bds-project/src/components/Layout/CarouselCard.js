@@ -25,8 +25,11 @@ import {
 import "./CarouselCard.css";
 import NoImageAvailable from "../../assets/No_Image_Available.jpg";
 import { Link } from "react-router-dom";
+import { useGetUserInfo, isLogged } from "../Auth/Authorization/getUserInfo";
 
 const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
+  const isLog = isLogged();
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [likeStatus, setLikeStatus] = useState(like.like);
@@ -66,19 +69,21 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
         }
       );
     } else {
-      createNewLike(
-        { userId: userId, postId: post.postId, like: !likeStatus },
-        {
-          onSuccess: (data) => {
-            queryClient.invalidateQueries({
-              queryKey: ["likes-by-user-id", userId],
-            });
-          },
-          onError: (error) => {
-            console.log(error);
-          },
-        }
-      );
+      if( userId !== null) {
+        createNewLike(
+          { userId: userId, postId: post.postId, like: !likeStatus },
+          {
+            onSuccess: (data) => {
+              queryClient.invalidateQueries({
+                queryKey: ["likes-by-user-id", userId],
+              });
+            },
+            onError: (error) => {
+              console.log(error);
+            },
+          }
+        );
+      }
     }
 
     setLikeStatus(!likeStatus);
@@ -93,7 +98,7 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
       }}
     >
       <Box sx={fixedIcon}>
-        {likeStatus === true && like.like === likeStatus ? (
+        {likeStatus === true && like.like === likeStatus && isLog === true ? (
           <AiFillHeart onClick={handleOnClickLove} size={24} color="red" />
         ) : (
           <FaRegHeart onClick={handleOnClickLove} size={24} color="#fff" />
@@ -114,14 +119,12 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
             {post.imageUrls &&
               post.imageUrls.map((step, index) => {
                 return (
-                  <div>
-                    <Box
-                      component="img"
-                      key={index}
-                      sx={carouselImage}
-                      src={step}
-                    ></Box>
-                  </div>
+                  <Box
+                    component="img"
+                    key={`image-${index}-${step}`}
+                    sx={carouselImage}
+                    src={step}
+                  ></Box>
                 );
               })}
           </SwipeableViews>

@@ -19,7 +19,7 @@ import NumericFormatCustom from "../../../Helper/NumericFormatCustom";
 import RequiredComponent from "../../../Helper/RequiredComponent";
 import createPostSchema from "./createPostSchema";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { GetCurrentId } from "../../Auth/Authorization/getUserInfo";
+import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 import { SnackBarContext } from "../../../context/snackbarContext";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +29,7 @@ const CreatePost = () => {
   const [snackBarStatus, setSnackBarStatus] = useContext(SnackBarContext);
   const [imagesUpload, setImagesUpload] = useState([]);
   const [videosUpload, setVideosUpload] = useState([]);
-  const userId = GetCurrentId();
+  const { userId } = useGetUserInfo();
   const defaultValue = {
     postTitle: "",
     description: "",
@@ -107,28 +107,25 @@ const CreatePost = () => {
       authorId: userId,
     };
     const finalData = { ...data, ...additionalData };
-    var tempData = {...finalData}
-    finalData.postDTO = {...tempData}
+    var tempData = { ...finalData };
+    finalData.postDTO = { ...tempData };
     delete finalData.postDTO.images;
     delete finalData.postDTO.video;
-    finalData.postDTO = JSON.stringify(finalData.postDTO)
-    console.log('data', typeof(finalData.postDTO))
-    mutate(
-      finalData,
-      {
-        onSuccess: (data) => {
-          setSnackBarStatus({
-            msg: "Create Successfully!",
-            key: Math.random(),
-          });
-          navigate(`/`);
-        },
-        onError: (error) => {
-          //show messae fail here
-          console.log("error", error);
-        },
-      }
-    );
+    finalData.postDTO = JSON.stringify(finalData.postDTO);
+    console.log("data", typeof finalData.postDTO);
+    mutate(finalData, {
+      onSuccess: (data) => {
+        setSnackBarStatus({
+          msg: "Create Successfully!",
+          key: Math.random(),
+        });
+        navigate(`/`);
+      },
+      onError: (error) => {
+        //show messae fail here
+        console.log("error", error);
+      },
+    });
   };
 
   return (

@@ -67,10 +67,10 @@ export default function Login() {
           navigate("/admin/list-users");
         }
         if (userIdentity.roles.toString() === "lessor") {
-          navigate("/lessor");
+          navigate("/");
         }
         if (userIdentity.roles.toString() === "tenant") {
-          navigate("/tenant");
+          navigate("/");
         }
       },
       onError: (error) => {

@@ -25,7 +25,9 @@ function App() {
           <Route path="/" element={<ClientLayout />}>
             <Route path="/" element={<Homepage />}></Route>
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
-            <Route path="/post/create" element={<CreatePost />}></Route>
+            <Route exact path="/" element={<PrivateRoute />}>
+              <Route path="/post/create" element={<CreatePost />}></Route>
+            </Route>
           </Route>
 
           <Route path="/login" element={<Login />}></Route>
