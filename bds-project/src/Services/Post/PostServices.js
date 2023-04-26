@@ -29,10 +29,25 @@ const createComment = async (data) => {
 };
 
 const createPost = async (data) => {
+  let header = authHeader();
+  header.headers["Content-Type"] = "multipart/form-data";
+
   const response = await axios.post(
-    `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create post api
+    `${Global.BASE_API_PATH}/api/v1/post/new`, // change to create post api
     data,
-    authHeader()
+    header
+  );
+  return response?.data;
+};
+
+const editPost = async (data) => {
+  let header = authHeader();
+  header.headers["Content-Type"] = "multipart/form-data";
+
+  const response = await axios.post(
+      `${Global.BASE_API_PATH}/api/v1/post/update`, // change to create post api
+      data,
+      header
   );
   return response?.data;
 };
@@ -74,6 +89,11 @@ const createNewLike = async (data) => {
   return response?.data;
 };
 
+const getTotalPost = async () => {
+  const { data } = await axios.get(`${Global.BASE_API_PATH}/api/v1/post/total`);
+  return data;
+};
+
 export {
   fetchAllPosts,
   fetchPostById,
@@ -82,5 +102,7 @@ export {
   editComment,
   createPost,
   likePost,
-  createNewLike
+  createNewLike,
+  getTotalPost,
+  editPost
 };
