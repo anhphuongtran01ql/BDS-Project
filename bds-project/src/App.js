@@ -14,6 +14,9 @@ import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
 import Register from "./components/Auth/Register";
+import ListOfTypeOfApartments from "./components/Admin/TypeApartment/list";
+import { EditTypeApartmentForm } from "./components/Admin/TypeApartment/edit";
+import { CreateTypeApartmentForm } from "./components/Admin/TypeApartment/create";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -36,6 +39,18 @@ function App() {
           <Route exact path="/" element={<PrivateRoute />}>
             <Route exact path="/admin" element={<AdminHomepage />}>
               <Route path="/admin/list-users" element={<Content />}></Route>
+              <Route
+                path="/admin/list-types-apartment"
+                element={<ListOfTypeOfApartments />}
+              ></Route>
+              <Route
+                path="/admin/list-types-apartment/:id"
+                element={<EditTypeApartmentForm />}
+              ></Route>
+              <Route
+                path="/admin/list-types-apartment/create"
+                element={<CreateTypeApartmentForm />}
+              ></Route>
               <Route
                 path="/admin/list-users/:userId"
                 element={<UserInfo />}

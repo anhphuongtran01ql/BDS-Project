@@ -49,10 +49,19 @@ const editUser = async (data) => {
   return response?.data;
 };
 
+const getTotalUser = async () => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/user/total`,
+    authHeader()
+  );
+  return data;
+};
+
 export {
   fetchAllUsers,
   fetchUserById,
   getUserByUsername,
   getLikesByUserId,
   editUser,
+  getTotalUser,
 };

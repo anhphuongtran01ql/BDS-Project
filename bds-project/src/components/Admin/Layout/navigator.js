@@ -86,7 +86,10 @@ export default function Navigator(props) {
               </ListItem>
             </Link>
 
-            <Link to="/admin/list-users" style={{ textDecoration: "none" }}>
+            <Link
+              to="/admin/list-types-apartment"
+              style={{ textDecoration: "none" }}
+            >
               <ListItem disablePadding key={3}>
                 <ListItemButton
                   sx={item}

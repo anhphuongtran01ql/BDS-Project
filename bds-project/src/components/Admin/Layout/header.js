@@ -57,8 +57,7 @@ function Header(props) {
         sx={{ zIndex: 0 }}
       >
         <Tabs value={0} textColor="inherit">
-          <Tab label="Users" />
-          {/* <Tab label="Usage" /> */}
+          <Tab label="List" />
         </Tabs>
       </AppBar>
     </>

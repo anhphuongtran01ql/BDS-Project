@@ -123,7 +123,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Username"
-                        type="username"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Username"
@@ -149,7 +149,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Full name"
-                        type="fullName"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Full name"
@@ -235,7 +235,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Address"
-                        type="address"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Address"

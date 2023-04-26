@@ -9,6 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   fetchAllUsers,
+  getTotalUser,
   getUserByUsername,
 } from "../../../Services/User/UserServices";
 
@@ -22,7 +23,7 @@ import { styled } from "@mui/material/styles";
 import UserDetailInfo from "../Users/detail";
 import Loading from "../../Layout/Loading";
 import { useState } from "react";
-import { Box, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -83,11 +84,18 @@ export default function Content() {
     queryFn: () => fetchAllUsers(paramQuery),
   });
 
-  // let countPage = Math.ceil(totalData / PER_PAGE);
+  const { data: totalData } = useQuery({
+    queryKey: ["totalData"],
+    queryFn: () => getTotalUser(),
+  });
+
+  console.log("total", totalData);
+
+  let countPage = Math.ceil(totalData / PER_PAGE);
 
   const handleChange = (event, value) => {
     setCurrentPage(value);
-    // queryClient.invalidateQueries({ queryKey: ["posts", paramQuery] });
+    queryClient.invalidateQueries({ queryKey: ["users", paramQuery] });
   };
 
   if (isLoading) {
@@ -207,7 +215,7 @@ export default function Content() {
               }}
               size="middle"
               color="primary"
-              count={3}
+              count={countPage}
               page={currentPage}
               onChange={handleChange}
             />
