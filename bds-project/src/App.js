@@ -17,6 +17,7 @@ import Register from "./components/Auth/Register";
 import ListOfTypeOfApartments from "./components/Admin/TypeApartment/list";
 import { EditTypeApartmentForm } from "./components/Admin/TypeApartment/edit";
 import { CreateTypeApartmentForm } from "./components/Admin/TypeApartment/create";
+import ListPost from "./components/Admin/Post/list";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -55,6 +56,7 @@ function App() {
                 path="/admin/list-users/:userId"
                 element={<UserInfo />}
               ></Route>
+              <Route path="/admin/list-posts" element={<ListPost />}></Route>
             </Route>
           </Route>
 

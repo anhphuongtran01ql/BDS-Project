@@ -44,8 +44,6 @@ export default function ListOfTypeOfApartments() {
     { label: "" },
   ];
 
-  const queryClient = useQueryClient();
-
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["typesApartment"],
     queryFn: () => fetchAllTypeApartments(),
