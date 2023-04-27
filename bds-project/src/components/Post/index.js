@@ -26,6 +26,7 @@ import Typography from "@mui/material/Typography";
 import ReserveCard from "./Detail/ReserveCard";
 import ReviewsComponent from "./Detail/ReviewsComponent";
 import NoImage from "../../../src/assets/No_Image_Available.jpg";
+import Loading from '../Layout/Loading'
 
 function DetailsPost() {
   const { postId } = useParams();
@@ -72,7 +73,7 @@ function DetailsPost() {
   return (
     <>
       {isLoading || isFetching ? (
-        <>Loading</>
+        <Loading/>
       ) : (
         <>
           <Container maxWidth="lg">

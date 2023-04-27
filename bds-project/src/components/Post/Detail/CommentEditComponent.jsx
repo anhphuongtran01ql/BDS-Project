@@ -2,10 +2,7 @@ import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  createComment,
-  editComment,
-} from "../../../Services/Post/PostServices";
+import { editComment } from "../../../Services/Post/PostServices";
 
 const CommentEditComponent = ({
   commentValue,
@@ -33,7 +30,6 @@ const CommentEditComponent = ({
         {
           onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["commentsByPostId"] });
-            console.log("success");
           },
           onError: (error) => {
             console.log(error);

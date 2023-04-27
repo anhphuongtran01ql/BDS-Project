@@ -19,7 +19,6 @@ const fetchPostById = async (postId) => {
 };
 // postId, userId, comment
 const createComment = async (data) => {
-  console.log(data);
   const response = await axios.post(
     `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create comment api
     data,

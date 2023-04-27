@@ -15,6 +15,10 @@ import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
 import Register from "./components/Auth/Register";
 import EditPost from "./components/Post/Edit/EditPost";
+import ListOfTypeOfApartments from "./components/Admin/TypeApartment/list";
+import { EditTypeApartmentForm } from "./components/Admin/TypeApartment/edit";
+import { CreateTypeApartmentForm } from "./components/Admin/TypeApartment/create";
+import ListPost from "./components/Admin/Post/list";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -39,9 +43,22 @@ function App() {
             <Route exact path="/admin" element={<AdminHomepage />}>
               <Route path="/admin/list-users" element={<Content />}></Route>
               <Route
+                path="/admin/list-types-apartment"
+                element={<ListOfTypeOfApartments />}
+              ></Route>
+              <Route
+                path="/admin/list-types-apartment/:id"
+                element={<EditTypeApartmentForm />}
+              ></Route>
+              <Route
+                path="/admin/list-types-apartment/create"
+                element={<CreateTypeApartmentForm />}
+              ></Route>
+              <Route
                 path="/admin/list-users/:userId"
                 element={<UserInfo />}
               ></Route>
+              <Route path="/admin/list-posts" element={<ListPost />}></Route>
             </Route>
           </Route>
 

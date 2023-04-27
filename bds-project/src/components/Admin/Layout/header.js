@@ -8,15 +8,11 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import {
-  GetCurrentRoles,
-  GetCurrentUsername,
-} from "../../Auth/Authorization/getUserInfo";
+import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 function Header(props) {
   const { onDrawerToggle } = props;
 
-  const username = GetCurrentUsername();
-  const role = GetCurrentRoles();
+  const { username, roles } = useGetUserInfo();
 
   return (
     <>
@@ -48,7 +44,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Welcome {role[0]} {username}
+                Welcome {roles[0]} {username}
               </Typography>
             </Grid>
           </Grid>
@@ -61,8 +57,7 @@ function Header(props) {
         sx={{ zIndex: 0 }}
       >
         <Tabs value={0} textColor="inherit">
-          <Tab label="Users" />
-          {/* <Tab label="Usage" /> */}
+          <Tab label="List" />
         </Tabs>
       </AppBar>
     </>

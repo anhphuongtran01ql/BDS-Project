@@ -1,26 +1,16 @@
 import useAccessToken from "../UseAccessToken";
 import parseJwt from "../ParseJwt";
 
-const GetCurrentUsername = () => {
+export const useGetUserInfo = () => {
   const { accessToken } = useAccessToken();
-  let userIdentity = parseJwt(accessToken);
-  return userIdentity.username;
+  if (!accessToken) return null;
+  const { username, userId, roles } = parseJwt(accessToken);
+  return { username, userId, roles };
 };
-export { GetCurrentUsername };
 
-const GetCurrentId = () => {
-  const { accessToken } = useAccessToken();
-  let userIdentity = parseJwt(accessToken);
-  return userIdentity.userId;
+export const isLogged = () => {
+  return localStorage.getItem("accessToken") != null ? true : false;
 };
-export { GetCurrentId };
-
-const GetCurrentRoles = () => {
-  const { accessToken } = useAccessToken();
-  let userIdentity = parseJwt(accessToken);
-  return userIdentity.roles;
-};
-export { GetCurrentRoles };
 
 const IsRoles = ({ CurrentRoles, ValidRoles }) => {
   let ans = false;
