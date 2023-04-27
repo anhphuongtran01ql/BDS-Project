@@ -62,7 +62,6 @@ function ListPost() {
     queryKey: ["posts", paramQuery],
     queryFn: () => fetchAllPosts(paramQuery),
   });
-  console.log("data", data);
 
   let countPage = Math.ceil(totalData / PER_PAGE);
 

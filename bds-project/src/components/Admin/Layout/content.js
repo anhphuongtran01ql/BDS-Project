@@ -89,8 +89,6 @@ export default function Content() {
     queryFn: () => getTotalUser(),
   });
 
-  console.log("total", totalData);
-
   let countPage = Math.ceil(totalData / PER_PAGE);
 
   const handleChange = (event, value) => {
@@ -207,18 +205,20 @@ export default function Content() {
                 </Typography>
               )}
             </Paper>
-            <Pagination
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "25px",
-              }}
-              size="middle"
-              color="primary"
-              count={countPage}
-              page={currentPage}
-              onChange={handleChange}
-            />
+            {totalData >= PER_PAGE && (
+              <Pagination
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "25px",
+                }}
+                size="middle"
+                color="primary"
+                count={countPage}
+                page={currentPage}
+                onChange={handleChange}
+              />
+            )}
           </Grid>
         </>
       )}

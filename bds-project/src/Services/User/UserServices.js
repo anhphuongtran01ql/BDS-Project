@@ -25,7 +25,6 @@ const getUserByUsername = async (username) => {
     `${Global.BASE_API_PATH}/api/v1/user/find?username=${username}`,
     authHeader()
   );
-  console.log("dataSearch", data);
   return data;
 };
 

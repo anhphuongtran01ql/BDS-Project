@@ -68,7 +68,6 @@ export function UserInfo() {
   });
   const defaultValue = {
     username: user?.username,
-    password: user?.password,
     fullName: user?.fullName,
     gender: user?.gender,
     email: user?.email,
@@ -84,12 +83,11 @@ export function UserInfo() {
 
     data.roleList = rolesList;
 
-    const customData = { ...data, password: user.password };
-    console.log("data", customData);
-    mutate(customData, {
+    console.log("data", data);
+    mutate(data, {
       onSuccess: () => {
         setSnackBarStatus({
-          msg: "Create Successfully!",
+          msg: "Updated Successfully!",
           key: Math.random(),
         });
         navigate(`/admin/list-users`);

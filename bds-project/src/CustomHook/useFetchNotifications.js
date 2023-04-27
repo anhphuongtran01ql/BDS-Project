@@ -26,7 +26,6 @@ const useFetchNotifications = (userId) => {
             refetchApi();
         }
     }
-    // console.log('handleClick', refetch)
     const invalidateQuery = () => {
         refetchApi();
         setRefetch(!refetch);
