@@ -15,6 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
+import { FaRegEdit } from "react-icons/fa";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -47,6 +49,13 @@ function PostCard({ item }) {
         avatar={<BackgroundLetterAvatars name={item.postTitle} />}
         title={item.postTitle}
         subheader={item.detailsAddress}
+        action={
+          <Link to={`/post/edit/${item.postId}`}>
+            <IconButton aria-label="settings">
+              <FaRegEdit />
+            </IconButton>
+          </Link>
+        }
       />
 
       <CardContent>

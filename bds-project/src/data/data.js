@@ -19,8 +19,8 @@ export const locationsTab = [
 
 export const rolesList = [
   { roleCode: "admin", roleName: "admin" },
-  { roleCode: "lessor", roleName: "lessor" },
-  { roleCode: "tenant", roleName: "tenant" },
+  { roleCode: "mod", roleName: "mod" },
+  { roleCode: "member", roleName: "member" },
 ];
 
 export const genders = ["Male", "Female"];

@@ -39,7 +39,6 @@ const EditPost = () => {
 
   const {
     data: postData,
-
     status,
   } = useQuery({
     queryKey: ["post", id],
@@ -60,8 +59,19 @@ const EditPost = () => {
   useEffect(() => {
     if (status === "success") {
       reset({ ...postData, images: [], video: [] });
+      setImagesUpload(postData.imageUrls);
+      setVideosUpload(postData.videoUrls);
     }
   }, [status, postData]);
+  console.log('images', imagesUpload)
+  console.log('videos', videosUpload)
+  const handleFilter = (original, dataToFilter) => {
+    return original.filter((item) =>
+      typeof dataToFilter === "string"
+        ? item !== dataToFilter
+        : item.name !== dataToFilter.name
+    );
+  };
 
   const handleFileUpload = (e) => {
     e.preventDefault();
@@ -97,19 +107,29 @@ const EditPost = () => {
   };
 
   const handleRemoveImage = (image) => () => {
-    setImagesUpload(imagesUpload.filter((item) => item.name !== image.name));
-    setValue(
-      "images",
-      getValues("images").filter((item) => item.name !== image.name)
-    );
+    setImagesUpload(handleFilter(imagesUpload, image));
+    typeof image === "string"
+      ? setValue("imageUrls", handleFilter(getValues("imageUrls"), image))
+      : setValue("images", handleFilter(getValues("images"), image));
+
+    // setImagesUpload(imagesUpload.filter((item) => item.name !== image.name));
+    // setValue(
+    //   "images",
+    //   getValues("images").filter((item) => item.name !== image.name)
+    // );
   };
 
   const handleRemoveVideo = (video) => () => {
-    setVideosUpload(videosUpload.filter((item) => item.name !== video.name));
-    setValue(
-      "video",
-      getValues("video").filter((item) => item.name !== video.name)
-    );
+    setVideosUpload(handleFilter(videosUpload, video));
+    typeof video === "string"
+      ? setValue("videoUrls", handleFilter(getValues("videoUrls"), video))
+      : setValue("video", handleFilter(getValues("video"), video));
+
+    // setVideosUpload(videosUpload.filter((item) => item.name !== video.name));
+    // setValue(
+    //   "video",
+    //   getValues("video").filter((item) => item.name !== video.name)
+    // );
   };
 
   const onSubmit = (data) => {
@@ -462,7 +482,7 @@ const EditPost = () => {
                                 width={200}
                                 style={{ objectFit: "contain" }}
                                 height={200}
-                                src={item.src}
+                                src={typeof item === "string" ? item : item.src}
                                 alt={`images-${index}`}
                               />
                               <CancelIcon
@@ -517,7 +537,19 @@ const EditPost = () => {
                                 position: "relative",
                               }}
                             >
-                              <Box>{item.name}</Box>
+                              {typeof item !== "string" ? (
+                                <Box>{item.name}</Box>
+                              ) : (
+                                <Box>
+                                  <iframe
+                                    width={200}
+                                    height={200}
+                                    src={item}
+                                    title="Youtube Player"
+                                    allowFullScreen
+                                  />
+                                </Box>
+                              )}
                               <CancelIcon
                                 sx={{ marginLeft: "5px", color: "#616161" }}
                                 size="small"

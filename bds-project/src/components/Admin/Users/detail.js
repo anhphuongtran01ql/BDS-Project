@@ -73,7 +73,7 @@ export function UserInfo() {
     email: user?.email,
     address: user?.address,
     roleList: user?.roleList[0].roleCode,
-    enable: true,
+    enable: user?.enable,
   };
 
   const onSubmit = (data) => {
@@ -290,7 +290,7 @@ export function UserInfo() {
                     name="enable"
                     defaultValue={defaultValue.enable}
                     render={({ field: { onChange, value } }) => (
-                      <Switch checked onChange={onChange} />
+                      <Switch checked={value} onChange={onChange} />
                     )}
                   />
                 </Grid>
