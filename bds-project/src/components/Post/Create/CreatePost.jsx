@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import Container from "@mui/material/Container";
@@ -22,6 +22,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 import { SnackBarContext } from "../../../context/snackbarContext";
 import { useNavigate } from "react-router-dom";
+import { fetchAllTypeApartments } from "../../../Services/TypeApartment/TypeApartmentServices";
 
 const CreatePost = () => {
   const { mutate } = useMutation(createPost);
@@ -30,6 +31,12 @@ const CreatePost = () => {
   const [imagesUpload, setImagesUpload] = useState([]);
   const [videosUpload, setVideosUpload] = useState([]);
   const { userId } = useGetUserInfo();
+
+  const { data: typeOfApartment, status } = useQuery({
+    queryKey: ["typeOfApartment"],
+    queryFn: () => fetchAllTypeApartments(),
+  });
+
   const defaultValue = {
     postTitle: "",
     description: "",
@@ -37,7 +44,7 @@ const CreatePost = () => {
     squareArea: 0,
     price: "",
     detailsAddress: "",
-    typeOfApartment: "room",
+    typeOfApartment: status === 'success' ? typeOfApartment[0].typeOfApartment : 'room' ,
     authorId: "",
     images: [],
     video: [],
@@ -48,11 +55,19 @@ const CreatePost = () => {
     formState: { errors },
     setValue,
     getValues,
+    reset
   } = useForm({
     resolver: yupResolver(createPostSchema),
-    defaultValues: defaultValue,
   });
-  const TYPE_OF_APARTMENT = ["room", "apartment"];
+
+
+  useEffect(() =>
+  {
+     if(status === 'success') {
+      reset({...defaultValue, typeOfApartment: typeOfApartment[0].typeOfApartment});
+     }
+  } 
+  ,[typeOfApartment, status]) 
 
   const handleFileUpload = (e) => {
     if (!e.target.files) {
@@ -109,21 +124,21 @@ const CreatePost = () => {
     const finalData = { ...data, ...additionalData };
 
     var tempData = { ...finalData };
-    
+
     const json = JSON.stringify(tempData);
     const blob = new Blob([json], {
-      type: 'application/json'
+      type: "application/json",
     });
-    
+
     const formData = new FormData();
 
     data.video.forEach((file) => {
       formData.append(`video`, file, file.name);
-    })
+    });
 
     data.images.forEach((file) => {
       formData.append(`images`, file, file.name);
-    })
+    });
 
     formData.append("postDTO", blob);
 
@@ -352,9 +367,9 @@ const CreatePost = () => {
                         errors?.typeOfApartment?.message
                       }
                     >
-                      {TYPE_OF_APARTMENT.map((item, index) => (
-                        <MenuItem value={item} key={index}>
-                          {item}
+                      {typeOfApartment?.map((item, index) => (
+                        <MenuItem value={item.typeOfApartment} key={index}>
+                          {item.typeOfApartment}
                         </MenuItem>
                       ))}
                     </TextField>

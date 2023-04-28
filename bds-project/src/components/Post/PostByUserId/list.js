@@ -27,6 +27,7 @@ import Nodata from "../../Layout/Noda";
 import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 import { FaRegEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import PostCard from "../../Admin/Post/card";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -89,127 +90,7 @@ function ListPostByUserId() {
           {data?.length > 0 ? (
             <>
               {data?.map((item, index) => {
-                return (
-                  <Card
-                    sx={{
-                      margin: "10px",
-                      padding: "20px",
-                      boxShadow: 3,
-                      bgcolor: (theme) =>
-                        theme.palette.mode === "dark" ? "#101010" : "#fff",
-                      color: (theme) =>
-                        theme.palette.mode === "dark" ? "grey.300" : "grey.800",
-                      p: 1,
-                      m: 1,
-                      borderRadius: 2,
-                      textAlign: "center",
-                      fontSize: "0.875rem",
-                      fontWeight: "700",
-                    }}
-                  >
-                    <CardHeader
-                      avatar={<BackgroundLetterAvatars name={item.postTitle} />}
-                      title={item.postTitle}
-                      subheader={item.detailsAddress}
-                      action={
-                        <Link to={`/post/edit/${item.postId}`}>
-                          <IconButton aria-label="settings">
-                            <FaRegEdit />
-                          </IconButton>
-                        </Link>
-                      }
-                    />
-
-                    <CardContent>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.description}
-                      </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing>
-                      <IconButton aria-label="add to favorites" size="small">
-                        <FavoriteIcon sx={{ marginRight: "10px" }} />
-                        <Typography variant="body1" color="text.secondary">
-                          {item.totalLike}
-                        </Typography>
-                      </IconButton>
-                      <IconButton aria-label="share">
-                        <MeetingRoomIcon sx={{ marginRight: "10px" }} />
-                        <Typography variant="body1" color="text.secondary">
-                          {item.numberOfRooms}
-                        </Typography>
-                      </IconButton>
-                      <ExpandMore
-                        expand={expanded}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                      >
-                        <ExpandMoreIcon />
-                      </ExpandMore>
-                    </CardActions>
-
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                      <Grid
-                        container
-                        spacing={2}
-                        sx={{
-                          padding: "0 20px 10px",
-                        }}
-                      >
-                        <Grid item xs={12} md={3} sx={{ ...typoFlex }}>
-                          <CardMedia
-                            component="img"
-                            height="250"
-                            display="inline"
-                            style={{ objectFit: "contain" }}
-                            width="auto"
-                            image={item.imageUrls[0]}
-                            alt="this is a post image"
-                          />
-                        </Grid>
-                        <Grid item xs={12} md={9} sx={{ ...typoFlex }}>
-                          <CardContent>
-                            <Typography
-                              paragraph
-                              sx={{ ...typoFlex }}
-                              color="text.secondary"
-                            >
-                              Address: {item.detailsAddress}
-                            </Typography>
-                            <Typography
-                              paragraph
-                              sx={{ ...typoFlex }}
-                              color="text.secondary"
-                            >
-                              Price: {item.price}
-                            </Typography>
-                            <Typography
-                              paragraph
-                              sx={{ ...typoFlex }}
-                              color="text.secondary"
-                            >
-                              Square Area: {item.squareArea}
-                            </Typography>
-                            <Typography
-                              paragraph
-                              sx={{ ...typoFlex }}
-                              color="text.secondary"
-                            >
-                              Number Of Rooms: {item.numberOfRooms}
-                            </Typography>
-                            <Typography
-                              paragraph
-                              sx={{ ...typoFlex }}
-                              color="text.secondary"
-                            >
-                              Description: {item.description}
-                            </Typography>
-                          </CardContent>
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Card>
-                );
+                return <PostCard item={item} key={index} />;
               })}
               {/* {totalData >= PER_PAGE && (
                 <Pagination

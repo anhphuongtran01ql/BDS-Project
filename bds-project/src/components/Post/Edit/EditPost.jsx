@@ -22,7 +22,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 import { SnackBarContext } from "../../../context/snackbarContext";
 import { useNavigate, useParams } from "react-router-dom";
-import Loading from "../../Layout/Loading";
+import { fetchAllTypeApartments } from "../../../Services/TypeApartment/TypeApartmentServices";
 
 const EditPost = () => {
   const { mutate } = useMutation(editPost);
@@ -32,11 +32,14 @@ const EditPost = () => {
   const [videosUpload, setVideosUpload] = useState([]);
   const { userId } = useGetUserInfo() ?? 2;
   const { id } = useParams();
+  const { data: typeOfApartment } = useQuery({
+    queryKey: ["typeOfApartment"],
+    queryFn: () => fetchAllTypeApartments(),
+  });
 
   const {
     data: postData,
-    isLoading,
-    isFetching,
+
     status,
   } = useQuery({
     queryKey: ["post", id],
@@ -49,18 +52,16 @@ const EditPost = () => {
     formState: { errors },
     setValue,
     getValues,
-    reset
+    reset,
   } = useForm({
     resolver: yupResolver(editPostSchema),
   });
 
   useEffect(() => {
-   if(status === 'success') {
-    reset({...postData, images:[], video:[]});
-   }
+    if (status === "success") {
+      reset({ ...postData, images: [], video: [] });
+    }
   }, [status, postData]);
-
-  const TYPE_OF_APARTMENT = ["room", "apartment"];
 
   const handleFileUpload = (e) => {
     e.preventDefault();
@@ -144,16 +145,17 @@ const EditPost = () => {
       },
       onError: (error) => {
         setSnackBarStatus({
-            msg: "Edit Failed!",
-            key: Math.random(),
-          });
+          msg: "Edit Failed!",
+          key: Math.random(),
+        });
       },
     });
   };
 
   return (
     <>
-      {status === 'success' &&  <form onSubmit={handleSubmit(onSubmit)}>
+      {status === "success" && (
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Container maxWidth="lg">
             <Card
               className="card-common"
@@ -195,7 +197,7 @@ const EditPost = () => {
                           helperText={
                             errors?.postTitle && errors?.postTitle?.message
                           }
-                          value={value} 
+                          value={value}
                         />
                       )}
                     />
@@ -371,9 +373,9 @@ const EditPost = () => {
                             errors?.typeOfApartment?.message
                           }
                         >
-                          {TYPE_OF_APARTMENT.map((item, index) => (
-                            <MenuItem value={item} key={index}>
-                              {item}
+                          {typeOfApartment?.map((item, index) => (
+                            <MenuItem value={item.typeOfApartment} key={index}>
+                              {item.typeOfApartment}
                             </MenuItem>
                           ))}
                         </TextField>
@@ -549,7 +551,8 @@ const EditPost = () => {
               </CardActions>
             </Card>
           </Container>
-        </form>}
+        </form>
+      )}
     </>
   );
 };
