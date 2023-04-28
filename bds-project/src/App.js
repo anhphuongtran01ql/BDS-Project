@@ -14,6 +14,7 @@ import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
 import Register from "./components/Auth/Register";
+import EditPost from "./components/Post/Edit/EditPost";
 import ListOfTypeOfApartments from "./components/Admin/TypeApartment/list";
 import { EditTypeApartmentForm } from "./components/Admin/TypeApartment/edit";
 import { CreateTypeApartmentForm } from "./components/Admin/TypeApartment/create";
@@ -31,6 +32,7 @@ function App() {
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/post/create" element={<CreatePost />}></Route>
+              <Route path="/post/edit/:id" element={<EditPost />}></Route>
             </Route>
           </Route>
 

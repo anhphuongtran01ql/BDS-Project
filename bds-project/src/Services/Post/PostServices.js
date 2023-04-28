@@ -39,6 +39,18 @@ const createPost = async (data) => {
   return response?.data;
 };
 
+const editPost = async (data) => {
+  let header = authHeader();
+  header.headers["Content-Type"] = "multipart/form-data";
+
+  const response = await axios.put(
+      `${Global.BASE_API_PATH}/api/v1/post/update`, // change to create post api
+      data,
+      header
+  );
+  return response?.data;
+};
+
 const editComment = async (data) => {
   const response = await axios.put(
     `${Global.BASE_API_PATH}/api/v1/comment/update`, // change to edit comment api
@@ -91,4 +103,5 @@ export {
   likePost,
   createNewLike,
   getTotalPost,
+  editPost
 };
