@@ -31,7 +31,7 @@ export const fullWidthFlex = {
 
 export const justifyCenter = { display: "flex", justifyContent: "center" };
 
-export const typographyTextAlignLeft = {paddingLeft: 0, textAlign: "left"};
+export const typographyTextAlignLeft = { paddingLeft: 0, textAlign: "left" };
 
 export const dFlex = {
   display: "flex",
@@ -55,6 +55,7 @@ export const carouselDot = {
   borderRadius: 10,
   p: 1,
   minWidth: "auto",
+  zIndex: 999,
 };
 
 export const fixedIcon = {

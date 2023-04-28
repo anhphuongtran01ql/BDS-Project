@@ -1,6 +1,6 @@
 import axios from "axios";
 import Global from "../../global";
-import {authHeader} from "../../Helper/AuthHeader";
+import { authHeader } from "../../Helper/AuthHeader";
 
 const fetchAllPosts = async (paramQuery) => {
   const { data } = await axios.get(
@@ -19,42 +19,76 @@ const fetchPostById = async (postId) => {
 };
 // postId, userId, comment
 const createComment = async (data) => {
-  console.log(data);
   const response = await axios.post(
-      `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create comment api
-      data,
-      authHeader()
+    `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create comment api
+    data,
+    authHeader()
   );
   return response?.data;
-}
+};
 
 const createPost = async (data) => {
+  let header = authHeader();
+  header.headers["Content-Type"] = "multipart/form-data";
+
   const response = await axios.post(
-      `${Global.BASE_API_PATH}/api/v1/comment/new`, // change to create post api
-      data,
-      authHeader()
+    `${Global.BASE_API_PATH}/api/v1/post/new`, // change to create post api
+    data,
+    header
   );
   return response?.data;
-}
+};
 
 const editComment = async (data) => {
   const response = await axios.put(
-      `${Global.BASE_API_PATH}/api/v1/post/`, // change to edit comment api
-      data,
-      authHeader()
+    `${Global.BASE_API_PATH}/api/v1/comment/update`, // change to edit comment api
+    data,
+    authHeader()
   );
   return response?.data;
-}
+};
 
 const fetchCommentByPostId = async (postId) => {
-  console.log(`${Global.BASE_API_PATH}/api/v1/comment/list/${postId}`);
   //change to api get comment by PostId
-  const {data} = await axios.get(
-      `${Global.BASE_API_PATH}/api/v1/comment/list/${postId}`,authHeader()
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/comment/list/${postId}`,
+    authHeader()
   );
 
   return data;
-}
+};
 
+const likePost = async (data) => {
+  const response = await axios.put(
+    `${Global.BASE_API_PATH}/api/v1/like/update`,
+    data,
+    authHeader()
+  );
+  return response?.data;
+};
 
-export {fetchAllPosts, fetchPostById, createComment, fetchCommentByPostId, editComment, createPost};
+const createNewLike = async (data) => {
+  const response = await axios.post(
+    `${Global.BASE_API_PATH}/api/v1/like/new`,
+    data,
+    authHeader()
+  );
+  return response?.data;
+};
+
+const getTotalPost = async () => {
+  const { data } = await axios.get(`${Global.BASE_API_PATH}/api/v1/post/total`);
+  return data;
+};
+
+export {
+  fetchAllPosts,
+  fetchPostById,
+  createComment,
+  fetchCommentByPostId,
+  editComment,
+  createPost,
+  likePost,
+  createNewLike,
+  getTotalPost,
+};

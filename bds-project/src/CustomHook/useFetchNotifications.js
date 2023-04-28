@@ -26,7 +26,6 @@ const useFetchNotifications = (userId) => {
             refetchApi();
         }
     }
-    // console.log('handleClick', refetch)
     const invalidateQuery = () => {
         refetchApi();
         setRefetch(!refetch);
@@ -43,7 +42,6 @@ const useFetchNotifications = (userId) => {
             fetchFirstTime();
         }
             const interval = setInterval(async () => {
-                console.log('fetch interrval', refetch)
                 if (refetch === true) {
                     await fetchNotification();
                 }

@@ -31,7 +31,7 @@ const MobileFooter = () => {
 
       <Stack sx={{ ...justifyCenter, mt: 2 }}>
         <Paper>
-          <Link href="#"> 2022 BDS copyright Inc</Link>
+          <Link href="#"> BDS copyright Inc</Link>
         </Paper>
       </Stack>
       <Stack sx={{ ...justifyCenter, mt: 2 }}>

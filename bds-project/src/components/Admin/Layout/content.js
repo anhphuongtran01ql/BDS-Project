@@ -1,14 +1,17 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../../Services/User/UserServices";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchAllUsers,
+  getTotalUser,
+  getUserByUsername,
+} from "../../../Services/User/UserServices";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,10 +19,11 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { BiEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
 import { styled } from "@mui/material/styles";
 import UserDetailInfo from "../Users/detail";
+import Loading from "../../Layout/Loading";
+import { useState } from "react";
+import { Pagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,12 +53,51 @@ export default function Content() {
     { label: "Detail" },
   ];
 
-  const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => fetchAllUsers(),
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    data: users,
+    isLoadingUser,
+    isFetchingUser,
+  } = useQuery({
+    queryKey: ["users", search],
+    queryFn: () => getUserByUsername(search),
   });
+  const queryClient = useQueryClient();
+
+  const onSearch = (e) => {
+    console.log("value", search);
+    if (e.keyCode === 13) {
+      queryClient.invalidateQueries({ queryKey: ["users", search] });
+    }
+  };
+  const PER_PAGE = 5;
+
+  let paramQuery = {
+    page: currentPage,
+    pageSize: PER_PAGE,
+  };
+
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["users", paramQuery],
+    queryFn: () => fetchAllUsers(paramQuery),
+  });
+
+  const { data: totalData } = useQuery({
+    queryKey: ["totalData"],
+    queryFn: () => getTotalUser(),
+  });
+
+  let countPage = Math.ceil(totalData / PER_PAGE);
+
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+    queryClient.invalidateQueries({ queryKey: ["users", paramQuery] });
+  };
+
   if (isLoading) {
-    return <>Loading</>;
+    return <Loading />;
   }
   if (isError) {
     return <>Error</>;
@@ -63,7 +106,7 @@ export default function Content() {
   return (
     <>
       {isLoading || isFetching ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <>
           <Grid item>
@@ -87,7 +130,11 @@ export default function Content() {
               <Toolbar>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item>
-                    <SearchIcon color="inherit" sx={{ display: "block" }} />
+                    <SearchIcon
+                      color="inherit"
+                      sx={{ display: "block" }}
+                      onSearch={onSearch}
+                    />
                   </Grid>
                   <Grid item xs>
                     <TextField
@@ -98,6 +145,11 @@ export default function Content() {
                         sx: { fontSize: "default" },
                       }}
                       variant="standard"
+                      onInput={(e) => {
+                        setSearch(e.target.value);
+                      }}
+                      value={search}
+                      onKeyDown={onSearch}
                     />
                   </Grid>
                 </Grid>
@@ -105,46 +157,44 @@ export default function Content() {
             </AppBar>
             <Paper sx={{ margin: "auto", overflow: "auto" }}>
               {data ? (
-                <>
-                  <TableContainer
-                    sx={{
-                      display: "table",
-                      tableLayout: "fixed",
-                    }}
-                  >
-                    <Table style={{ minWidth: 600 }}>
-                      <TableHead>
-                        <TableRow>
-                          {columns.map((column) => (
-                            <StyledTableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ minWidth: column.minWidth }}
-                            >
-                              {column.label}
-                            </StyledTableCell>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {data.map((list, index) => (
-                          <StyledTableRow key={list.username}>
-                            <StyledTableCell component="th" scope="row">
-                              {list.username}
-                            </StyledTableCell>
-                            <StyledTableCell>{list.email}</StyledTableCell>
-                            <StyledTableCell>
-                              {list.roleList[0].roleName}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <UserDetailInfo userId={list.userId} />
-                            </StyledTableCell>
-                          </StyledTableRow>
+                <TableContainer
+                  sx={{
+                    display: "table",
+                    tableLayout: "fixed",
+                  }}
+                >
+                  <Table style={{ minWidth: 600 }}>
+                    <TableHead>
+                      <TableRow>
+                        {columns.map((column) => (
+                          <StyledTableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ minWidth: column.minWidth }}
+                          >
+                            {column.label}
+                          </StyledTableCell>
                         ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.map((list, index) => (
+                        <StyledTableRow key={list.username}>
+                          <StyledTableCell component="th" scope="row">
+                            {list.username}
+                          </StyledTableCell>
+                          <StyledTableCell>{list.email}</StyledTableCell>
+                          <StyledTableCell>
+                            {list.roleList[0].roleName}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <UserDetailInfo userId={list.userId} />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               ) : (
                 <Typography
                   sx={{ my: 5, mx: 2 }}
@@ -155,6 +205,20 @@ export default function Content() {
                 </Typography>
               )}
             </Paper>
+            {totalData >= PER_PAGE && (
+              <Pagination
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "25px",
+                }}
+                size="middle"
+                color="primary"
+                count={countPage}
+                page={currentPage}
+                onChange={handleChange}
+              />
+            )}
           </Grid>
         </>
       )}
