@@ -31,6 +31,7 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
   const isLog = isLogged();
 
   const [activeStep, setActiveStep] = React.useState(0);
+  const [totalLikes, setTotalLikes] = React.useState(post.totalLike ?? 0);
 
   const [likeStatus, setLikeStatus] = useState(like.like);
   const maxSteps = post?.imageUrls.length;
@@ -62,6 +63,7 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
             queryClient.invalidateQueries({
               queryKey: ["likes-by-user-id", like.userId],
             });
+            setTotalLikes(totalLikes + 1);
           },
           onError: (error) => {
             console.log(error);
@@ -69,7 +71,7 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
         }
       );
     } else {
-      if( userId !== null) {
+      if (userId !== null) {
         createNewLike(
           { userId: userId, postId: post.postId, like: !likeStatus },
           {
@@ -77,6 +79,7 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
               queryClient.invalidateQueries({
                 queryKey: ["likes-by-user-id", userId],
               });
+              setTotalLikes(totalLikes + 1);
             },
             onError: (error) => {
               console.log(error);
@@ -94,14 +97,87 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
       className="carouselCard"
       sx={{
         flexGrow: 1,
-        position: "relative",
       }}
     >
-      <Box sx={fixedIcon}>
-        {likeStatus === true && like.like === likeStatus && isLog === true ? (
-          <AiFillHeart onClick={handleOnClickLove} size={24} color="red" />
+      <Box
+        sx={{
+          flexGrow: 1,
+          position: "relative",
+        }}
+      >
+        <Box sx={fixedIcon}>
+          {likeStatus === true && like.like === likeStatus && isLog === true ? (
+            <AiFillHeart size={24} color="red" />
+          ) : (
+            <FaRegHeart onClick={handleOnClickLove} size={24} color="#fff" />
+          )}
+        </Box>
+
+        <Link
+          to={`/post/${post.postId}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {post.imageUrls && post.imageUrls.length ? (
+            <SwipeableViews
+              axis={"x"}
+              index={activeStep}
+              onChangeIndex={handleStepChange}
+              enableMouseEvents
+            >
+              {post.imageUrls &&
+                post.imageUrls.map((step, index) => {
+                  return (
+                    <Box
+                      component="img"
+                      key={`image-${index}-${step}`}
+                      sx={carouselImage}
+                      src={step}
+                    ></Box>
+                  );
+                })}
+            </SwipeableViews>
+          ) : (
+            <>
+              <Box
+                component="img"
+                sx={carouselImage}
+                src={NoImageAvailable}
+              ></Box>
+            </>
+          )}
+        </Link>
+
+        {post.imageUrls && post.imageUrls.length ? (
+          <Box sx={fixedBottom}>
+            <MobileStepper
+              sx={{ backgroundColor: "transparent" }}
+              steps={maxSteps}
+              position="static"
+              activeStep={activeStep}
+              nextButton={
+                <Button
+                  size="small"
+                  sx={carouselDot}
+                  onClick={handleNext}
+                  disabled={activeStep === maxSteps - 1}
+                >
+                  <KeyboardArrowRight />
+                </Button>
+              }
+              backButton={
+                <Button
+                  size="small"
+                  sx={carouselDot}
+                  onClick={handleBack}
+                  disabled={activeStep === 0}
+                >
+                  <KeyboardArrowLeft />
+                </Button>
+              }
+            />
+          </Box>
         ) : (
-          <FaRegHeart onClick={handleOnClickLove} size={24} color="#fff" />
+          ""
         )}
       </Box>
 
@@ -109,107 +185,36 @@ const CarouselCard = ({ post, like, mutate, userId, createNewLike }) => {
         to={`/post/${post.postId}`}
         style={{ textDecoration: "none", color: "inherit" }}
       >
-        {post.imageUrls && post.imageUrls.length ? (
-          <SwipeableViews
-            axis={"x"}
-            index={activeStep}
-            onChangeIndex={handleStepChange}
-            enableMouseEvents
-          >
-            {post.imageUrls &&
-              post.imageUrls.map((step, index) => {
-                return (
-                  <Box
-                    component="img"
-                    key={`image-${index}-${step}`}
-                    sx={carouselImage}
-                    src={step}
-                  ></Box>
-                );
-              })}
-          </SwipeableViews>
-        ) : (
-          <>
-            <Box
-              component="img"
-              sx={carouselImage}
-              src={NoImageAvailable}
-            ></Box>
-          </>
-        )}
-      </Link>
-
-      {post.imageUrls && post.imageUrls.length ? (
-        <Box sx={fixedBottom}>
-          <MobileStepper
-            sx={{ backgroundColor: "transparent" }}
-            steps={maxSteps}
-            position="static"
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size="small"
-                sx={carouselDot}
-                onClick={handleNext}
-                disabled={activeStep === maxSteps - 1}
-              >
-                <KeyboardArrowRight />
-              </Button>
-            }
-            backButton={
-              <Button
-                size="small"
-                sx={carouselDot}
-                onClick={handleBack}
-                disabled={activeStep === 0}
-              >
-                <KeyboardArrowLeft />
-              </Button>
-            }
-          />
-        </Box>
-      ) : (
-        ""
-      )}
-
-      <Link
-        to={`/post/${post.postId}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
         <Box sx={flexBetween}>
-          <Box sx={{ mt: 2 }}>
-            <Typography
-              component="div"
-              align="left"
-              sx={{ fontSize: 20, fontWeight: "bold", padding: "0 8px" }}
-            >
-              {post.postTitle}
-            </Typography>
+          <Box>
+            <Box sx={{ mt: 2, ...dFlex }}>
+              <Typography
+                component="div"
+                align="left"
+                sx={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  padding: "0 8px",
+                }}
+              >
+                {post.postTitle}
+              </Typography>
+              <Box sx={{ ...dFlex, alignItems: "center" }}>
+                <AiFillHeart size={16} color="red" />
+                <Typography component="h5"> {totalLikes}</Typography>
+              </Box>
+            </Box>
             <Typography
               component="div"
               align="left"
               sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
             >
               <span>
-                <i>{post.detailsAddress} </i>
+                <strong>${post.price}</strong>/night
               </span>
               <span> | </span>
               <span> {post.typeOfApartment}</span>
             </Typography>
-
-            <Typography
-              component="h5"
-              align="left"
-              sx={{ fontSize: 18, fontWeight: 400, padding: "0 8px" }}
-            >
-              <strong>${post.price}</strong>/night
-            </Typography>
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <Box sx={{ ...dFlex, alignItems: "center" }}>
-              <AiFillHeart size={16} color="red" />
-              <Typography component="h5"> {post.totalLike}</Typography>
-            </Box>
           </Box>
         </Box>
       </Link>

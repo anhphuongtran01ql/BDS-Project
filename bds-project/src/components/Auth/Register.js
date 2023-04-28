@@ -16,12 +16,17 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import validateSchema from "../Admin/Users/validate";
 import { Button, MenuItem, Select } from "@mui/material";
-import { genders, rolesList } from "../../data/data";
+import { genders } from "../../data/data";
 import { register } from "../../Services/Auth/Login";
 
 const textField = {
   marginBottom: 2,
 };
+
+export const rolesList = [
+  { roleCode: "mod", roleName: "mod" },
+  { roleCode: "member", roleName: "member" },
+];
 
 function Copyright(props) {
   return (

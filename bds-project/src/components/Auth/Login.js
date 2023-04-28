@@ -66,10 +66,10 @@ export default function Login() {
         if (userIdentity.roles.toString() === "admin") {
           navigate("/admin/list-users");
         }
-        if (userIdentity.roles.toString() === "lessor") {
+        if (userIdentity.roles.toString() === "mod") {
           navigate("/");
         }
-        if (userIdentity.roles.toString() === "tenant") {
+        if (userIdentity.roles.toString() === "member") {
           navigate("/");
         }
       },
@@ -153,7 +153,6 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                // onClick={handleSubmit}
               >
                 Sign In
               </LoadingButton>

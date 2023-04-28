@@ -44,9 +44,9 @@ const editPost = async (data) => {
   header.headers["Content-Type"] = "multipart/form-data";
 
   const response = await axios.put(
-      `${Global.BASE_API_PATH}/api/v1/post/update`, // change to create post api
-      data,
-      header
+    `${Global.BASE_API_PATH}/api/v1/post/update`, // change to create post api
+    data,
+    header
   );
   return response?.data;
 };
@@ -93,6 +93,15 @@ const getTotalPost = async () => {
   return data;
 };
 
+const fetchAllPostsByUserId = async (paramQuery, userId) => {
+  const { data } = await axios.get(
+    `${Global.BASE_API_PATH}/api/v1/post/list/${userId}?page=${
+      paramQuery.page - 1
+    }&size=${paramQuery.pageSize}`
+  );
+  return data;
+};
+
 export {
   fetchAllPosts,
   fetchPostById,
@@ -103,5 +112,6 @@ export {
   likePost,
   createNewLike,
   getTotalPost,
-  editPost
+  editPost,
+  fetchAllPostsByUserId,
 };

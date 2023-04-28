@@ -40,7 +40,7 @@ export const dFlex = {
 
 export const fixedBottom = {
   position: "absolute",
-  bottom: 100,
+  bottom: 1,
   width: "100%",
 };
 

@@ -2,7 +2,6 @@ import {
   Avatar,
   Button,
   Divider,
-  ListItemIcon,
   Menu,
   MenuItem,
   Stack,
@@ -10,10 +9,11 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { AiOutlineMenu, AiOutlineMessage } from "react-icons/ai";
-import { FaRegUserCircle } from "react-icons/fa";
 import Logout from "../../Auth/Authorization/Logout";
 import { BsPostcardHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
+import { BsFileEarmarkPost } from "react-icons/bs";
 
 const displayMenuItems = {
   display: "flex",
@@ -21,7 +21,15 @@ const displayMenuItems = {
   color: "#616161",
 };
 
+function stringAvatar(name) {
+  return {
+    children: `${name.split(" ")[0][0]}`,
+  };
+}
+
 function DropdownList() {
+  const { username, roles, userId } = useGetUserInfo();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -40,9 +48,21 @@ function DropdownList() {
         }}
         onClick={handleClick}
       >
-        <Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "5px 15px",
+          }}
+        >
           <AiOutlineMenu size={24} />
-          <FaRegUserCircle size={24} />
+          {/* <FaRegUserCircle size={24} /> */}
+          <Avatar
+            sx={{ bgcolor: "rgb(233, 30, 99)", margin: 0 }}
+            alt="user"
+            {...stringAvatar(username)}
+          />
         </Stack>
       </Button>
 
@@ -80,6 +100,24 @@ function DropdownList() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <MenuItem sx={{ display: "flex", justifyContent: "center" }} disabled>
+          <Typography sx={{ fontWeight: 900 }}>
+            {roles} | {username}
+          </Typography>
+        </MenuItem>
+        <Divider sx={{ margin: "8px 0" }} />
+
+        <Link
+          to={`/mod/list-post/${userId}`}
+          style={{ textDecoration: "none" }}
+        >
+          <MenuItem onClick={handleClose} sx={displayMenuItems}>
+            <BsFileEarmarkPost size={24} />
+            <Typography>My posts</Typography>
+          </MenuItem>
+        </Link>
+        <Divider sx={{ margin: "8px 0" }} />
+
         <Link to="/post/create" style={{ textDecoration: "none" }}>
           <MenuItem onClick={handleClose} sx={displayMenuItems}>
             <BsPostcardHeart size={22} />
