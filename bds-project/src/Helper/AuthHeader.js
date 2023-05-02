@@ -3,7 +3,7 @@ const authHeader = () => {
 
   if (tokens) {
     return {
-      headers: { Authorization: `Bearer ${tokens}` },
+      headers: { Authorization: `Bearer ${tokens}`},
     };
   } else {
     return {};

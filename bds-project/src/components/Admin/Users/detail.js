@@ -8,15 +8,18 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiDetail } from "react-icons/bi";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUserById } from "../../../Services/User/UserServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { editUser, fetchUserById } from "../../../Services/User/UserServices";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import validateSchema from "./validate";
+import validateSchema, { validateEditSchema } from "./validate";
 import TextField from "@mui/material/TextField";
 import { rolesList, genders } from "../../../data/data";
+import Loading from "../../Layout/Loading";
+import { useContext } from "react";
+import { SnackBarContext } from "../../../context/snackbarContext";
 
 const textField = {
   marginBottom: 1,
@@ -43,39 +46,63 @@ const gridTextField = {
 
 export function UserInfo() {
   const { userId } = useParams();
-  console.log("userId", userId);
+  const { mutate } = useMutation(editUser);
+  const [snackBarStatus, setSnackBarStatus] = useContext(SnackBarContext);
+  const navigate = useNavigate();
 
-  const { data, isLoading, isFetching } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["user", userId],
     queryFn: () => fetchUserById(userId),
   });
-
-  console.log("data", data);
 
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validateSchema),
+    resolver: yupResolver(validateEditSchema),
   });
   const defaultValue = {
-    username: data?.username,
-    fullName: data?.fullName,
-    gender: data?.gender,
-    email: data?.email,
-    address: data?.address,
-    role: data?.roleList[0].roleCode,
+    username: user?.username,
+    fullName: user?.fullName,
+    gender: user?.gender,
+    email: user?.email,
+    address: user?.address,
+    roleList: user?.roleList[0].roleCode,
     enable: true,
   };
 
-  const onSubmit = () => {
-    console.log("success");
+  const onSubmit = (data) => {
+    const rolesList = [
+      { roleCode: `${data.roleList}`, roleName: `${data.roleList}` },
+    ];
+
+    data.roleList = rolesList;
+
+    console.log("data", data);
+    mutate(data, {
+      onSuccess: () => {
+        setSnackBarStatus({
+          msg: "Updated Successfully!",
+          key: Math.random(),
+        });
+        navigate(`/admin/list-users`);
+      },
+      onError: (error) => {
+        //show messae fail here
+        console.log("error", error);
+      },
+    });
   };
+
   return (
     <>
       {isFetching || isLoading ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <>
           <Container sx={{ padding: "10px 20px" }}>
@@ -94,7 +121,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Username"
-                        type="username"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Username"
@@ -120,7 +147,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Full name"
-                        type="fullName"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Full name"
@@ -206,7 +233,7 @@ export function UserInfo() {
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         label="Address"
-                        type="address"
+                        type="text"
                         onChange={onChange}
                         value={value}
                         placeholder="Address"
@@ -230,12 +257,12 @@ export function UserInfo() {
                 <Grid item xs={12} sm={10} xl={11} sx={{ ...gridTextField }}>
                   <Controller
                     control={control}
-                    name="role"
-                    defaultValue={defaultValue.role}
+                    name="roleList"
+                    defaultValue={defaultValue.roleList}
                     render={({ field: { onChange, value } }) => (
                       <TextField
                         fullWidth
-                        id="select-role"
+                        id="select-roleList"
                         select
                         value={value}
                         onChange={onChange}
