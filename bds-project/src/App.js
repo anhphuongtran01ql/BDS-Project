@@ -13,6 +13,7 @@ import AdminHomepage from "./components/Admin/Homepage";
 import { PrivateRoute } from "./routes/privateRoutes";
 import { UserInfo } from "./components/Admin/Users/detail";
 import Content from "./components/Admin/Layout/content";
+import Messenger from "./components/Chat/Messenger";
 import Register from "./components/Auth/Register";
 import EditPost from "./components/Post/Edit/EditPost";
 import ListOfTypeOfApartments from "./components/Admin/TypeApartment/list";
@@ -38,6 +39,8 @@ function App() {
                 path="/mod/list-post/:id"
                 element={<ListPostByUserId />}
               ></Route>
+              <Route path="/chat" element={<Messenger />}></Route>
+              <Route path="/chat/:id" element={<Messenger />}></Route>
             </Route>
           </Route>
 
