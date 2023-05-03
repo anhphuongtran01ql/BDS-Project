@@ -2,9 +2,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SendIcon from "@mui/icons-material/Send";
 import useMessenger from "../../CustomHook/useMessenger";
 import "./Messenger.css";
-import {
-  GetCurrentId,
-} from "../Auth/Authorization/getUserInfo";
+import { useGetUserInfo } from "../Auth/Authorization/getUserInfo";
 import { useEffect, useRef, useState } from "react";
 
 const MessageBaseOnType = ({ className, message }) => {
@@ -12,11 +10,13 @@ const MessageBaseOnType = ({ className, message }) => {
 };
 
 const Message = ({ chatId }) => {
-  const userId = GetCurrentId() ?? 2;
+  const { userId } = useGetUserInfo();
   const [messages, status, handleSendMessage] = useMessenger(chatId);
   const [messageInput, setMessageInput] = useState("");
   const inputRef = useRef();
   const bottomRef = useRef(null);
+
+  // console.log("messages", messages);
 
   const handleSend = () => {
     if (messageInput === "") {
@@ -35,7 +35,7 @@ const Message = ({ chatId }) => {
   };
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
@@ -58,7 +58,7 @@ const Message = ({ chatId }) => {
           </div>
 
           <div className="chat-page">
-            <div id='test' className="msg-inbox" >
+            <div id="test" className="msg-inbox">
               {messages.messages.map((message, index) => {
                 if (userId !== message.senderId) {
                   return (

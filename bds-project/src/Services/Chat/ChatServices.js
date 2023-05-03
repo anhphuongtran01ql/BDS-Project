@@ -6,7 +6,8 @@ const fetchInboxMessagesByUserId = async (userId, userRole) => {
   const basePath = `${Global.BASE_API_PATH}/api/v1/chat`;
   const { data } = await axios.get(
     `${basePath}/${
-      userRole.includes("guest") ? "sender?senderId=" : "receiver?receiverId="}${userId}`,
+      userRole.includes("member") ? "sender?senderId=" : "receiver?receiverId="
+    }${userId}`,
     authHeader()
   );
 
@@ -22,4 +23,13 @@ const getChatByChatId = async (chatId) => {
   return data;
 };
 
-export { fetchInboxMessagesByUserId, getChatByChatId };
+const createChat = async (senderId, receiverId) => {
+  const response = await axios.post(
+    `${Global.BASE_API_PATH}/api/v1/chat/new/room?senderId=${senderId}&receiverId=${receiverId}`,
+    null,
+    authHeader()
+  );
+  return response?.data;
+};
+
+export { fetchInboxMessagesByUserId, getChatByChatId, createChat };

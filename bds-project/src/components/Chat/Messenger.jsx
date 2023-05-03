@@ -3,16 +3,11 @@ import ListChat from "./ListChat";
 import Message from "./Message";
 import { useParams } from "react-router-dom";
 import { fetchInboxMessagesByUserId } from "../../Services/Chat/ChatServices";
-import {
-  GetCurrentId,
-  GetCurrentRoles,
-  GetCurrentUsername,
-} from "../Auth/Authorization/getUserInfo";
+import { useGetUserInfo } from "../Auth/Authorization/getUserInfo";
 import { useQuery } from "@tanstack/react-query";
 
 const Messenger = ({}) => {
-  const userId = GetCurrentId();
-  const userRole = GetCurrentRoles();
+  const { userId, roles } = useGetUserInfo();
 
   const {
     data: inboxMessages,
@@ -21,7 +16,7 @@ const Messenger = ({}) => {
     status,
   } = useQuery({
     queryKey: ["inbox_messages", userId],
-    queryFn: () => fetchInboxMessagesByUserId(userId, userRole), // incase user is lessor
+    queryFn: () => fetchInboxMessagesByUserId(userId, roles), // incase user is lessor
   });
 
   const { id } = useParams();

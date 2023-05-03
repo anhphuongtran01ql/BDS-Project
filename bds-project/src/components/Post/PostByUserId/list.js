@@ -1,51 +1,11 @@
 import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import {
-  fetchAllPostsByUserId,
-  getTotalPost,
-} from "../../../Services/Post/PostServices";
+import { fetchAllPostsByUserId } from "../../../Services/Post/PostServices";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../Layout/Loading";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Collapse,
-  Grid,
-  IconButton,
-  Pagination,
-  Typography,
-} from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import BackgroundLetterAvatars from "../../Layout/Notification/BackgroundLetterAvatars";
-import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import { Box, Pagination } from "@mui/material";
 import Nodata from "../../Layout/Noda";
 import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
-import { FaRegEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import PostCard from "../../Admin/Post/card";
-
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
-const typoFlex = {
-  display: "flex",
-  justifyContent: "flex-start",
-  textAlign: "left",
-  fontSize: "14px",
-};
 
 function ListPostByUserId() {
   const { userId } = useGetUserInfo();
@@ -69,17 +29,10 @@ function ListPostByUserId() {
   });
 
   //   let countPage = Math.ceil(totalData / PER_PAGE);
-
-  const handleChange = (event, value) => {
-    setCurrentPage(value);
-    queryClient.invalidateQueries({ queryKey: ["posts", paramQuery] });
-  };
-
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  // const handleChange = (event, value) => {
+  //   setCurrentPage(value);
+  //   queryClient.invalidateQueries({ queryKey: ["posts", paramQuery] });
+  // };
 
   return (
     <>
