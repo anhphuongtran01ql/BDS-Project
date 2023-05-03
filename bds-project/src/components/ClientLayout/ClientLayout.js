@@ -39,7 +39,7 @@ const ClientLayout = () => {
             overflowY: "scroll",
           }}
         >
-          {location.pathname === "/" ? (
+          {location.pathname === "/" || location.pathname === "/post/filter" ? (
             <Box
               sx={{
                 padding: "10px 0",

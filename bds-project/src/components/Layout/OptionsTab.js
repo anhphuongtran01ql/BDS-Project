@@ -3,20 +3,25 @@ import React, { useEffect } from "react";
 import { FaFilter } from "react-icons/fa";
 
 import TextField from "@mui/material/TextField";
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Button, Container, Grid, MenuItem, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { filterPost } from "../../Services/Post/PostServices";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Global from "../../global";
 import FilterPost from "../Post/Filter/FilterPost";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { fetchAllTypeApartments } from "../../Services/TypeApartment/TypeApartmentServices";
 
 const OptionsTab = () => {
+  const { data: typeOfApartment, status } = useQuery({
+    queryKey: ["typesApartment"],
+    queryFn: () => fetchAllTypeApartments(),
+  });
   const defaultValue = {
     post_title: "",
     details_address: "",
     number_of_rooms: "",
-    typeOfApartment: "room",
+    typeOfApartment:
+      status === "success" ? typeOfApartment[0].typeOfApartment : "room",
     price: "",
     square_area: "",
   };
@@ -146,15 +151,17 @@ const OptionsTab = () => {
                   <TextField
                     size="small"
                     label="Type of apartment"
-                    type="text"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    select
                     onChange={onChange}
                     value={value}
-                    placeholder="Type of apartment"
                     fullWidth
-                  />
+                  >
+                    {typeOfApartment?.map((item, index) => (
+                      <MenuItem value={item.typeOfApartment} key={index}>
+                        {item.typeOfApartment}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 )}
               />
             </Grid>
