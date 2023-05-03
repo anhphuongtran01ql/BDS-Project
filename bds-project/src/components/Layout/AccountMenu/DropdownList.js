@@ -129,14 +129,17 @@ function DropdownList() {
               </MenuItem>
             </Link>
             <Divider sx={{ margin: "8px 0" }} />
+
+            <Link to="/chat" style={{ textDecoration: "none" }}>
+              <MenuItem onClick={handleClose} sx={displayMenuItems}>
+                <AiOutlineMessage size={24} />
+                <Typography>All message</Typography>
+              </MenuItem>
+            </Link>
+
+            <Divider sx={{ margin: "8px 0" }} />
           </div>
         )}
-
-        <MenuItem onClick={handleClose} sx={displayMenuItems}>
-          <AiOutlineMessage size={24} />
-          <Typography>All message</Typography>
-        </MenuItem>
-        <Divider />
 
         <MenuItem sx={displayMenuItems}>
           <Logout />

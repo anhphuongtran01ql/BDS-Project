@@ -54,7 +54,8 @@ const UserInbox = ({ user, indexValue }) => {
                 variant="body2"
                 color="text.primary"
               >
-                {user.messages[user.messages.length - 1].content}
+                {user.messages.length > 0 &&
+                  user.messages[user.messages.length - 1].content}
               </Typography>
             </React.Fragment>
           }

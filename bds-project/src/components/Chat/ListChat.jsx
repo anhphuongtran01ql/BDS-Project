@@ -17,7 +17,7 @@ const ListChat = ({ inboxMessages }) => {
       </Typography>
       <List
         sx={{
-          width: "auto",
+          width: 300,
           height: "95%",
           overflow: "auto",
           maxWidth: 360,

@@ -16,8 +16,6 @@ const Message = ({ chatId }) => {
   const inputRef = useRef();
   const bottomRef = useRef(null);
 
-  // console.log("messages", messages);
-
   const handleSend = () => {
     if (messageInput === "") {
       alert("Message input cannot be empty");
@@ -37,7 +35,6 @@ const Message = ({ chatId }) => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
   return (
     <>
       {status === "success" && (
@@ -59,65 +56,69 @@ const Message = ({ chatId }) => {
 
           <div className="chat-page">
             <div id="test" className="msg-inbox">
-              {messages.messages.map((message, index) => {
-                if (userId !== message.senderId) {
-                  return (
-                    <div className="received-chats" key={index}>
-                      <div className="received-chats-img">
-                        <AccountCircleIcon
-                          fontSize="large"
-                          className="received-chats-img"
-                        />
+              {messages.messages !== undefined ? (
+                messages.messages.map((message, index) => {
+                  if (userId !== message.senderId) {
+                    return (
+                      <div className="received-chats" key={index}>
+                        <div className="received-chats-img">
+                          <AccountCircleIcon
+                            fontSize="large"
+                            className="received-chats-img"
+                          />
+                        </div>
+                        <div className="received-msg">
+                          <div className="received-msg-inbox">
+                            {message.multiple === true ? (
+                              message.messages.map((item, itemIndex) => (
+                                <MessageBaseOnType
+                                  className="received-msg-inbox-content"
+                                  message={item}
+                                  key={`${itemIndex}-left-message`}
+                                />
+                              ))
+                            ) : (
+                              <MessageBaseOnType
+                                message={message.content}
+                                className="received-msg-inbox-content"
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="received-msg">
-                        <div className="received-msg-inbox">
+                    );
+                  } else {
+                    return (
+                      <div className="outgoing-chats" key={index}>
+                        <div className="outgoing-chats-img">
+                          <AccountCircleIcon
+                            fontSize="large"
+                            className="received-chats-img"
+                          />
+                        </div>
+                        <div className="outgoing-chats-msg">
                           {message.multiple === true ? (
                             message.messages.map((item, itemIndex) => (
                               <MessageBaseOnType
-                                className="received-msg-inbox-content"
+                                className="multi-msg"
                                 message={item}
-                                key={`${itemIndex}-left-message`}
+                                key={`${itemIndex}-right-message`}
                               />
                             ))
                           ) : (
                             <MessageBaseOnType
                               message={message.content}
-                              className="received-msg-inbox-content"
+                              className="multi-msg"
                             />
                           )}
                         </div>
                       </div>
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div className="outgoing-chats" key={index}>
-                      <div className="outgoing-chats-img">
-                        <AccountCircleIcon
-                          fontSize="large"
-                          className="received-chats-img"
-                        />
-                      </div>
-                      <div className="outgoing-chats-msg">
-                        {message.multiple === true ? (
-                          message.messages.map((item, itemIndex) => (
-                            <MessageBaseOnType
-                              className="multi-msg"
-                              message={item}
-                              key={`${itemIndex}-right-message`}
-                            />
-                          ))
-                        ) : (
-                          <MessageBaseOnType
-                            message={message.content}
-                            className="multi-msg"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  );
-                }
-              })}
+                    );
+                  }
+                })
+              ) : (
+                <div></div>
+              )}
               <div ref={bottomRef}></div>
             </div>
             <div className="msg-bottom">

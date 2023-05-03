@@ -6,7 +6,10 @@ import TextField from "@mui/material/TextField";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { filterPost } from "../../Services/Post/PostServices";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Global from "../../global";
+import FilterPost from "../Post/Filter/FilterPost";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const OptionsTab = () => {
   const defaultValue = {
@@ -17,6 +20,8 @@ const OptionsTab = () => {
     price: "",
     square_area: "",
   };
+  const navigate = useNavigate();
+  const { mutate } = useMutation(filterPost);
 
   const {
     handleSubmit,
@@ -24,8 +29,39 @@ const OptionsTab = () => {
     formState: { errors },
   } = useForm({});
 
+  // console.log("filterPosts", filterPosts);
+
+  const santizeData = (data, item) => {
+    switch (item) {
+      case "number_of_rooms":
+      case "price":
+      case "square_area":
+        return Number(data[item]);
+      default:
+        return data[item];
+    }
+  };
+
   const onSubmit = (data) => {
-    console.log("data", data);
+    const keys = Object.keys(data);
+    const result = keys.reduce((total, item, index) => {
+      if (data[item]) {
+        return { ...total, [item]: santizeData(data, item) };
+      }
+      return total;
+    }, {});
+
+    mutate(result, {
+      onSuccess: (data) => {
+        console.log("data success", data);
+        <FilterPost data={data} />;
+        navigate("/post/filter", { state: data });
+      },
+      onError: (error) => {
+        //show messae fail here
+        console.log("error", error);
+      },
+    });
   };
 
   return (

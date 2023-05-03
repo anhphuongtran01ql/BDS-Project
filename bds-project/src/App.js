@@ -21,6 +21,7 @@ import { EditTypeApartmentForm } from "./components/Admin/TypeApartment/edit";
 import { CreateTypeApartmentForm } from "./components/Admin/TypeApartment/create";
 import ListPost from "./components/Admin/Post/list";
 import ListPostByUserId from "./components/Post/PostByUserId/list";
+import FilterPost from "./components/Post/Filter/FilterPost";
 
 function App() {
   const [snackbarStatus, setSnackbarStatus] = useState({});
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<ClientLayout />}>
             <Route path="/" element={<Homepage />}></Route>
             <Route path="/post/:postId" element={<DetailsPost />}></Route>
+            <Route path="/post/filter" element={<FilterPost />}></Route>
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/post/create" element={<CreatePost />}></Route>
               <Route path="/post/edit/:id" element={<EditPost />}></Route>

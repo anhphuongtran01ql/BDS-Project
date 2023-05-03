@@ -37,10 +37,7 @@ const EditPost = () => {
     queryFn: () => fetchAllTypeApartments(),
   });
 
-  const {
-    data: postData,
-    status,
-  } = useQuery({
+  const { data: postData, status } = useQuery({
     queryKey: ["post", id],
     queryFn: () => fetchPostById(id),
   });
@@ -63,8 +60,6 @@ const EditPost = () => {
       setVideosUpload(postData.videoUrls);
     }
   }, [status, postData]);
-  console.log('images', imagesUpload)
-  console.log('videos', videosUpload)
   const handleFilter = (original, dataToFilter) => {
     return original.filter((item) =>
       typeof dataToFilter === "string"
@@ -189,7 +184,7 @@ const EditPost = () => {
                 >
                   <Grid item xs={12}>
                     <Typography variant="h4" gutterBottom>
-                      Create Post
+                      Edit Post
                     </Typography>
                   </Grid>
 

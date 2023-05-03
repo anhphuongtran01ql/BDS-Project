@@ -102,6 +102,14 @@ const fetchAllPostsByUserId = async (paramQuery, userId) => {
   return data;
 };
 
+const filterPost = async (data) => {
+  const response = await axios.post(
+    `${Global.BASE_API_PATH}/api/v1/search/filters`,
+    data
+  );
+  return response?.data;
+};
+
 export {
   fetchAllPosts,
   fetchPostById,
@@ -114,4 +122,5 @@ export {
   getTotalPost,
   editPost,
   fetchAllPostsByUserId,
+  filterPost,
 };
