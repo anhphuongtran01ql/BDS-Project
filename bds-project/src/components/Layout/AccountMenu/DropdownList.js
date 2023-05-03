@@ -12,7 +12,7 @@ import { AiOutlineMenu, AiOutlineMessage } from "react-icons/ai";
 import Logout from "../../Auth/Authorization/Logout";
 import { BsPostcardHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
+import { IsRoles, useGetUserInfo } from "../../Auth/Authorization/getUserInfo";
 import { BsFileEarmarkPost } from "react-icons/bs";
 
 const displayMenuItems = {
@@ -106,25 +106,31 @@ function DropdownList() {
           </Typography>
         </MenuItem>
         <Divider sx={{ margin: "8px 0" }} />
+        {IsRoles({
+          CurrentRoles: roles,
+          ValidRoles: ["mod"],
+        }) && (
+          <div>
+            <Link
+              to={`/mod/list-post/${userId}`}
+              style={{ textDecoration: "none" }}
+            >
+              <MenuItem onClick={handleClose} sx={displayMenuItems}>
+                <BsFileEarmarkPost size={24} />
+                <Typography>My posts</Typography>
+              </MenuItem>
+            </Link>
+            <Divider sx={{ margin: "8px 0" }} />
 
-        <Link
-          to={`/mod/list-post/${userId}`}
-          style={{ textDecoration: "none" }}
-        >
-          <MenuItem onClick={handleClose} sx={displayMenuItems}>
-            <BsFileEarmarkPost size={24} />
-            <Typography>My posts</Typography>
-          </MenuItem>
-        </Link>
-        <Divider sx={{ margin: "8px 0" }} />
-
-        <Link to="/post/create" style={{ textDecoration: "none" }}>
-          <MenuItem onClick={handleClose} sx={displayMenuItems}>
-            <BsPostcardHeart size={22} />
-            <Typography>Create new post</Typography>
-          </MenuItem>
-        </Link>
-        <Divider sx={{ margin: "8px 0" }} />
+            <Link to="/post/create" style={{ textDecoration: "none" }}>
+              <MenuItem onClick={handleClose} sx={displayMenuItems}>
+                <BsPostcardHeart size={22} />
+                <Typography>Create new post</Typography>
+              </MenuItem>
+            </Link>
+            <Divider sx={{ margin: "8px 0" }} />
+          </div>
+        )}
 
         <MenuItem onClick={handleClose} sx={displayMenuItems}>
           <AiOutlineMessage size={24} />

@@ -26,7 +26,7 @@ import Typography from "@mui/material/Typography";
 import ReserveCard from "./Detail/ReserveCard";
 import ReviewsComponent from "./Detail/ReviewsComponent";
 import NoImage from "../../../src/assets/No_Image_Available.jpg";
-import Loading from '../Layout/Loading'
+import Loading from "../Layout/Loading";
 
 function DetailsPost() {
   const { postId } = useParams();
@@ -73,7 +73,7 @@ function DetailsPost() {
   return (
     <>
       {isLoading || isFetching ? (
-        <Loading/>
+        <Loading />
       ) : (
         <>
           <Container maxWidth="lg">
@@ -241,6 +241,12 @@ function DetailsPost() {
                     <ReserveCard data={data} />
                   </Grid>
                 </Grid>
+              </Grid>
+
+              <Grid item xs={10} sm={10} md={8}>
+                <video controls width="100%">
+                  <source src={data?.videoUrls[0]} type="video/mp4" />
+                </video>
               </Grid>
 
               <Grid item xs={12}>

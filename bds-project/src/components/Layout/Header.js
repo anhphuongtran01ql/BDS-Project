@@ -3,13 +3,8 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // components
 import Logo from "./Logo.js";
-import {
-  flexBetweenCenter,
-  dFlex,
-  displayOnDesktop,
-} from "../../themes/commonStyles";
+import { dFlex } from "../../themes/commonStyles";
 import ProfileSettings from "./ProfileSettings";
-import MobileSearch from "./MobileSearch.js";
 
 const Header = () => {
   return (
@@ -23,22 +18,19 @@ const Header = () => {
       <Container maxWidth="xl">
         <Box
           sx={{
-            ...flexBetweenCenter,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             minHeight: 90,
             px: 4,
           }}
         >
-          <Box sx={displayOnDesktop}>
+          <Box>
             <Logo />
           </Box>
-          {/* <Box sx={displayOnDesktop}>
-            <LocationSearch />
-          </Box> */}
-          <Box sx={displayOnDesktop}>
+
+          <Box>
             <ProfileSettings />
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <MobileSearch />
           </Box>
         </Box>
       </Container>

@@ -7,10 +7,15 @@ import { Link } from "react-router-dom";
 import { flexCenter } from "../../themes/commonStyles";
 import Notification from "./Notification/Notification";
 import DropdownList from "./AccountMenu/DropdownList";
-import { isLogged } from "../Auth/Authorization/getUserInfo";
+import {
+  isLogged,
+  IsRoles,
+  useGetUserInfo,
+} from "../Auth/Authorization/getUserInfo";
 
 const ProfileSettings = () => {
   const isLog = isLogged();
+  const userInfo = useGetUserInfo();
 
   return (
     <Box sx={flexCenter}>
@@ -19,14 +24,26 @@ const ProfileSettings = () => {
           <p>Become A Host</p>
         </Link>
       )}
-      {isLog === true && (
-        <Stack>
-          <Button>
-            <Notification />
-          </Button>
-          <DropdownList />
-        </Stack>
-      )}
+      {isLog === true &&
+        userInfo &&
+        IsRoles({
+          CurrentRoles: userInfo.roles,
+          ValidRoles: ["mod", "member"],
+        }) && (
+          <Stack sx={{ padding: 0 }}>
+            {isLog === true &&
+              userInfo &&
+              IsRoles({
+                CurrentRoles: userInfo.roles,
+                ValidRoles: ["mod"],
+              }) && (
+                <Button>
+                  <Notification />
+                </Button>
+              )}
+            <DropdownList />
+          </Stack>
+        )}
     </Box>
   );
 };

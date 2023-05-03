@@ -108,15 +108,14 @@ export default function Content() {
       {isLoading || isFetching ? (
         <Loading />
       ) : (
-        <>
-          <Grid item>
-            {/* <Grid
+        <Grid item>
+          {/* <Grid
               item
               sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}
             >
               <Button variant="contained">Add user</Button>
             </Grid> */}
-            <AppBar
+          {/* <AppBar
               position="static"
               color="default"
               elevation={0}
@@ -154,73 +153,72 @@ export default function Content() {
                   </Grid>
                 </Grid>
               </Toolbar>
-            </AppBar>
-            <Paper sx={{ margin: "auto", overflow: "auto" }}>
-              {data ? (
-                <TableContainer
-                  sx={{
-                    display: "table",
-                    tableLayout: "fixed",
-                  }}
-                >
-                  <Table style={{ minWidth: 600 }}>
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <StyledTableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ minWidth: column.minWidth }}
-                          >
-                            {column.label}
-                          </StyledTableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.map((list, index) => (
-                        <StyledTableRow key={list.username}>
-                          <StyledTableCell component="th" scope="row">
-                            {list.username}
-                          </StyledTableCell>
-                          <StyledTableCell>{list.email}</StyledTableCell>
-                          <StyledTableCell>
-                            {list.roleList[0].roleName}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <UserDetailInfo userId={list.userId} />
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              ) : (
-                <Typography
-                  sx={{ my: 5, mx: 2 }}
-                  color="text.secondary"
-                  align="center"
-                >
-                  No users for this system yet
-                </Typography>
-              )}
-            </Paper>
-            {totalData >= PER_PAGE && (
-              <Pagination
+            </AppBar> */}
+          <Paper sx={{ margin: "auto", overflow: "auto" }}>
+            {data ? (
+              <TableContainer
                 sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "25px",
+                  display: "table",
+                  tableLayout: "fixed",
                 }}
-                size="middle"
-                color="primary"
-                count={countPage}
-                page={currentPage}
-                onChange={handleChange}
-              />
+              >
+                <Table style={{ minWidth: 600 }}>
+                  <TableHead>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <StyledTableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                        >
+                          {column.label}
+                        </StyledTableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data.map((list, index) => (
+                      <StyledTableRow key={list.username}>
+                        <StyledTableCell component="th" scope="row">
+                          {list.username}
+                        </StyledTableCell>
+                        <StyledTableCell>{list.email}</StyledTableCell>
+                        <StyledTableCell>
+                          {list.roleList[0].roleName}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <UserDetailInfo userId={list.userId} />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Typography
+                sx={{ my: 5, mx: 2 }}
+                color="text.secondary"
+                align="center"
+              >
+                No users for this system yet
+              </Typography>
             )}
-          </Grid>
-        </>
+          </Paper>
+          {totalData >= PER_PAGE && (
+            <Pagination
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "25px",
+              }}
+              size="middle"
+              color="primary"
+              count={countPage}
+              page={currentPage}
+              onChange={handleChange}
+            />
+          )}
+        </Grid>
       )}
     </>
   );

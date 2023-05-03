@@ -6,12 +6,12 @@
     overflow: hidden;
 }
 
-img {
+/* img {
     width: 50px;
     vertical-align: middle;
     border-style: none;
     border-radius: 100%;
-}
+} */
 
 .message {
     width: 100%;
@@ -81,7 +81,7 @@ img {
 }
 
 .Mui-selected {
-    background-color: #ECF3FF !important;
+    background-color: #ECF3FF;
 }
 
 .divider {

@@ -44,7 +44,7 @@ function PostCard({ item }) {
   };
 
   return (
-    <Card sx={{ margin: "10px" }}>
+    <Card sx={{ margin: "10px", boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}>
       <CardHeader
         avatar={<BackgroundLetterAvatars name={item.postTitle} />}
         title={item.postTitle}

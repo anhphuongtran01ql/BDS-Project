@@ -29,7 +29,6 @@ const ClientLayout = () => {
       >
         <Box>
           <Header />
-          {location.pathname === "/post" ? <OptionsTab /> : null}
         </Box>
         <Box
           sx={{
@@ -40,8 +39,20 @@ const ClientLayout = () => {
             overflowY: "scroll",
           }}
         >
+          {location.pathname === "/" ? (
+            <Box
+              sx={{
+                padding: "10px 0",
+                boxShadow: "rgba(0, 0, 0, 0.15) 0px 3px 3px 0px",
+              }}
+            >
+              <OptionsTab />
+            </Box>
+          ) : null}
+
           <Container maxWidth="xl" sx={{ mb: 3 }}>
             <Outlet />
+
             <Box
               sx={{
                 display: { xs: "flex", md: "none" },

@@ -126,11 +126,11 @@ theme = {
     },
     MuiListItemButton: {
       styleOverrides: {
-        root: {
-          "&.Mui-selected": {
-            color: "#4fc3f7",
-          },
-        },
+        // root: {
+        //   "&.Mui-selected": {
+        //     color: "#4fc3f7",
+        //   },
+        // },
       },
     },
     MuiListItemText: {
